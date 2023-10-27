@@ -1,6 +1,6 @@
 package com.dogfight.dogfight.api.service.user;
 
-import com.dogfight.dogfight.api.service.user.request.UserServiceRequest;
+import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
 import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,11 @@ class UserServiceWeakTest {
         //given
         LocalDateTime registeredDateTime = LocalDateTime.now();
 
-        UserServiceRequest request = UserServiceRequest.builder()
-                .userId("test")
+        UserRegisterServiceRequest request = UserRegisterServiceRequest.builder()
+                .account("test")
                 .password("test")
+                .nickname("testUser")
+                .email("test@test.com")
                 .build();
 
         //when

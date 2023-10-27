@@ -18,7 +18,7 @@ public class UserResponse {
     public static UserResponse of(User user){
         return UserResponse.builder()
                 .id(user.getId())
-                .userId(user.getUserId())
+                .userId(user.getAccount())
                 .build();
     }
 }

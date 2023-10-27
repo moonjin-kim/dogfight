@@ -1,22 +1,19 @@
 package com.dogfight.dogfight.api.service.user.request;
 
+import com.dogfight.dogfight.domain.user.User;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class UserServiceRequest {
-
+public class UserLoginServiceRequest {
     @NotEmpty(message = "ID는 필수입니다.")
-    private String userId;
+    private String account;
     @NotEmpty(message = "비밀번호는 필수입니다.")
     private String password;
 
     @Builder
-    public UserServiceRequest(String userId, String password) {
-        this.userId = userId;
+    public UserLoginServiceRequest(String account, String password) {
+        this.account = account;
         this.password = password;
     }
+
 }
