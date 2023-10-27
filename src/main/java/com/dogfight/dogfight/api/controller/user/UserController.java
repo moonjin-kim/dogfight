@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @RequestMapping("/api/v0/user")
 @RestController
@@ -30,10 +31,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResponse<UserTokenResponse> login(@RequestBody UserLoginRequest request) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println("loginTest");
+        Date localDateTime = new Date();
         return ApiResponse.ok(
-                userService.login(request.toServiceRequest())
+                userService.login(request.toServiceRequest(),localDateTime)
         );
 
     }
@@ -56,11 +56,11 @@ public class UserController {
 
     }
 
-    @GetMapping("/test")
-    public ApiResponse<String> test(){
-        System.out.println("test");
+    @PostMapping("/refresh")
+    public ApiResponse<UserTokenResponse> refresh(@RequestBody UserRefreshTokenRequest request){
+        Date localDateTime = new Date();
         return ApiResponse.ok(
-                "test"
+                userService.refresh(request.toService(), localDateTime)
         );
     }
 }

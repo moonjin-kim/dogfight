@@ -3,9 +3,13 @@ package com.dogfight.dogfight.common.jwt;
 import com.dogfight.dogfight.api.service.user.UserDetailServiceImple;
 import com.dogfight.dogfight.domain.user.User;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,13 +21,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
 @RequiredArgsConstructor
+@Log4j2
 @Component
 public class JwtProvider {
 
@@ -38,8 +43,17 @@ public class JwtProvider {
     private Long refreshExpiration;
     private static final String BEARER = "Bearer ";
 
+    private static final String ACCESS_TOKEN = "AccessToken";
+    private static final String REFRESH_TOKEN = "RefreshToken";
+
     @Autowired
     private final UserDetailServiceImple userDetailsService;
+
+    private Key key;
+    @PostConstruct
+     void init() {
+        key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
 
     /**
      * AccessToken 생성
@@ -49,25 +63,11 @@ public class JwtProvider {
     public String createAccessToken(String account, Date date) {
         Claims claims = Jwts.claims().setSubject(account);
 
-        String accessToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(date)
-                .setExpiration(new Date(date.getTime() + accessExpiration))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
-        redisTemplate.opsForValue().set(
-                account,
-                accessToken,
-                accessExpiration,
-                TimeUnit.MILLISECONDS
-        );
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(date)
                 .setExpiration(new Date(date.getTime() + accessExpiration))
-                .signWith(SignatureAlgorithm.HS256 , secretKey)
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
 
@@ -82,8 +82,8 @@ public class JwtProvider {
         String refreshToken = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(date)
-                .setExpiration(new Date(date.getTime() + accessExpiration))
-                .signWith(SignatureAlgorithm.HS256 , secretKey)
+                .setExpiration(new Date(date.getTime() + refreshExpiration))
+                .signWith(SignatureAlgorithm.HS256 , key)
                 .compact();
 
         redisTemplate.opsForValue().set(
@@ -115,43 +115,36 @@ public class JwtProvider {
      * 토큰 유효성 검사
      * @param type 토큰 타입
      * @param token 토큰
-     * @param response response
      */
-    public boolean validateToken(String type, String token, HttpServletResponse response){
-//        ObjectMapper mapper = new ObjectMapper();
+    public boolean validateToken(String type, String token){
 
         try{
-            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+            System.out.println(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             System.out.println("정상");
             return true;
         } catch (ExpiredJwtException e){
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            log.error(type + " : 토큰이 만료되었습니다");
             ResponseStatusException tokenExpiredException
                     = new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, type+ "토큰이 만료되었습니다.");
+                    HttpStatus.UNAUTHORIZED, type+ "type : 토큰이 만료되었습니다.");
 
-//            mapper.writeValue(response.getWriter(),tokenExpiredException.getReason());
 
             throw tokenExpiredException;
         } catch (Exception e){
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            log.error("토큰이 이상해요");
 
             ResponseStatusException responseStatusException
                     = new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, type+ "토큰을 다시 확인해주세요.");
 
-//            mapper.writeValue(response.getWriter(),responseStatusException.getReason());
 
             throw responseStatusException;
         }
     }
 
     public String getAccount(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public void saveAuthentication(String account){

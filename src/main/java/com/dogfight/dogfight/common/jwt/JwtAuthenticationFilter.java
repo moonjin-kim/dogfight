@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String accessToken = jwtProvider.resolveToken(request);
 
-        if(accessToken != null && jwtProvider.validateToken("access",accessToken,response)){
+        if(accessToken != null && jwtProvider.validateToken("access",accessToken)){
             String account = jwtProvider.getAccount(accessToken);
             jwtProvider.saveAuthentication(account);
         }

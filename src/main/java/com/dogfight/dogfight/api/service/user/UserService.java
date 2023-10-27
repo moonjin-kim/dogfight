@@ -6,17 +6,19 @@ import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public interface UserService {
 
     public UserResponse register(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime);
 
-    public UserTokenResponse login(UserRegisterServiceRequest userLoginServiceRequest);
+    public UserTokenResponse login(UserRegisterServiceRequest userLoginServiceRequest, Date date);
 
     public boolean logout(UserServiceRefreshTokenRequest request);
 
     public boolean withdraw(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime);
 
+    public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest,Date date);
 
 
 }

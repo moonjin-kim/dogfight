@@ -4,9 +4,11 @@ import com.dogfight.dogfight.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Table(name = "users")
+@NoArgsConstructor
 @Entity
 public class User extends BaseEntity {
     @Id
