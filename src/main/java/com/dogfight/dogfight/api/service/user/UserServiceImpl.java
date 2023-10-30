@@ -80,7 +80,17 @@ public class UserServiceImpl implements  UserService{
 
     @Override
     public boolean logout(UserServiceRefreshTokenRequest request) {
-        return false;
+        String refresh = request.getRefreshToken();
+
+        if(!jwtProvider.validateToken("refresh", refresh)){
+            throw new BadCredentialsException("로그아웃에 실패하였습니다");
+        }
+
+        String account = jwtProvider.getAccount(refresh);
+
+        redisTemplate.delete(account);
+
+        return true;
     }
 
     @Override

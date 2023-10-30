@@ -28,9 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String accessToken = jwtProvider.resolveToken(request);
-
-        if(accessToken != null && jwtProvider.validateToken("access",accessToken)){
-            String account = jwtProvider.getAccount(accessToken);
+        if(accessToken != null && jwtProvider.validateToken("access",accessToken.replace("Bearer ", ""))){
+            String account = jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
             jwtProvider.saveAuthentication(account);
         }
 

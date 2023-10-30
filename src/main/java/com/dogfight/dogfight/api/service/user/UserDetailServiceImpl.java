@@ -2,6 +2,7 @@ package com.dogfight.dogfight.api.service.user;
 
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +14,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 @Log4j2
-public class UserDetailServiceImple implements UserDetailsService {
+public class UserDetailServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByNickname(username)
+    public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
+        User user = userRepository.findByAccount(account)
                 .orElseThrow(() -> {
                     log.error("존재하지 않는 계정입니다");
                     return new RuntimeException("존재하지 않는 계정입니다");

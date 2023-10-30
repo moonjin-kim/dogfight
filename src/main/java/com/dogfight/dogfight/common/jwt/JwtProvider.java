@@ -1,13 +1,10 @@
 package com.dogfight.dogfight.common.jwt;
 
-import com.dogfight.dogfight.api.service.user.UserDetailServiceImple;
-import com.dogfight.dogfight.domain.user.User;
+import com.dogfight.dogfight.api.service.user.UserDetailServiceImpl;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class JwtProvider {
     private static final String REFRESH_TOKEN = "RefreshToken";
 
     @Autowired
-    private final UserDetailServiceImple userDetailsService;
+    private final UserDetailServiceImpl userDetailsService;
 
     private Key key;
     @PostConstruct
@@ -101,6 +98,7 @@ public class JwtProvider {
      */
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("Authorization");
+//        return request.getHeader("Authorization");
     }
 
     public Claims parseToken(String token, Key secretKey) {
@@ -132,11 +130,11 @@ public class JwtProvider {
 
             throw tokenExpiredException;
         } catch (Exception e){
-            log.error("토큰이 이상해요");
+            log.error("토큰이 이상해요 : " + token);
 
             ResponseStatusException responseStatusException
                     = new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, type+ "토큰을 다시 확인해주세요.");
+                    HttpStatus.UNAUTHORIZED, type+ ": 토큰을 다시 확인해주세요.");
 
 
             throw responseStatusException;

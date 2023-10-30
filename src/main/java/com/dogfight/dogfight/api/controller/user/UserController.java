@@ -40,10 +40,10 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<Boolean> logout() {
+    public ApiResponse<Boolean> logout(@RequestBody UserRefreshTokenRequest request) {
         LocalDateTime localDateTime = LocalDateTime.now();
         return ApiResponse.ok(
-                userService.logout(new UserRefreshTokenRequest("test").toService())
+                userService.logout(request.toService())
         );
 
     }
