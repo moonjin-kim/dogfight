@@ -48,11 +48,11 @@ public class UserController {
 
     }
 
-    @PostMapping("/withdraw")
-    public ApiResponse<Boolean> withdraw(@RequestBody UserRegisterRequest request) {
+    @DeleteMapping
+    public ApiResponse<String> withdraw(@RequestBody UserRefreshTokenRequest request) {
         LocalDateTime localDateTime = LocalDateTime.now();
         return ApiResponse.ok(
-                userService.withdraw(request.toServiceRequest(), localDateTime)
+                userService.withdraw(request.toService())
         );
 
     }

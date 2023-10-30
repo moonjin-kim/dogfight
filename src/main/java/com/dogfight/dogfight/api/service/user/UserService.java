@@ -16,7 +16,7 @@ public interface UserService {
 
     public boolean logout(UserServiceRefreshTokenRequest request);
 
-    public boolean withdraw(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime);
+    public String withdraw(UserServiceRefreshTokenRequest request);
 
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest,Date date);
 

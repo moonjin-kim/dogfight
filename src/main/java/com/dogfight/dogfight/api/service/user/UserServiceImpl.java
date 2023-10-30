@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,9 +95,18 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public boolean withdraw(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime) {
+    public String withdraw(UserServiceRefreshTokenRequest request) {
+        if(!logout(request)){
+            return "유효하지 않은 계정입니다.";
+        }
 
-        return false;
+        String account = jwtProvider.getAccount(request.getRefreshToken());
+
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new BadCredentialsException("존재하지 않는 계정입니다"));
+        userRepository.delete(user);
+
+        return "회원탈퇴 되었습니다. 이용해주셔서 감사합니다.";
     }
 
     @Override
