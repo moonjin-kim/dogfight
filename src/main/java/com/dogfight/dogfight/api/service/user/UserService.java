@@ -20,5 +20,7 @@ public interface UserService {
 
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest,Date date);
 
+    public boolean ConfirmationPassword(String password);
+
 
 }

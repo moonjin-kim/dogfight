@@ -7,6 +7,7 @@ import com.dogfight.dogfight.api.controller.user.request.UserRegisterRequest;
 import com.dogfight.dogfight.api.service.user.UserService;
 import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ApiResponse<UserResponse> register(@RequestBody UserRegisterRequest request) {
+    public ApiResponse<UserResponse> register(@RequestBody @Valid UserRegisterRequest request) {
         LocalDateTime localDateTime = LocalDateTime.now();
         return ApiResponse.ok(
                 userService.register(request.toServiceRequest(), localDateTime)
