@@ -63,3 +63,14 @@ jobs:
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
 
     # 6. 서버 접속하여 도커 이미지를 pull 받고 실행
+    - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER_NAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          docker stop $(docker ps -a -q) 
+          docker rm $(docker ps -a -q) 
+          docker pull "${{ secrets.DOCKERHUB_USERNAME }}"/dogfight-server
+          docker run -d -p 8080:8080 --name dogserver "${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
