@@ -66,11 +66,16 @@ jobs:
     - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        password: ${{ secrets.SSH_PASSWORD }}
+        host: 192.168.0.1
+        username: dogman
+        password: answls1543
         port: 22
         script: whoami
+        # host: ${{ secrets.SSH_HOST }}
+        # username: ${{ secrets.SSH_USER }}
+        # password: ${{ secrets.SSH_PASSWORD }}
+        # port: 22
+        # script: whoami
         # script: |
         #   docker stop $(docker ps -a -q) 
         #   docker rm $(docker ps -a -q) 
