@@ -66,12 +66,13 @@ jobs:
     - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
       uses: appleboy/ssh-action@v0.1.6
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER_NAME }}
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
         password: ${{ secrets.SSH_PASSWORD }}
         port: 22
-        script: |
-          docker stop $(docker ps -a -q) 
-          docker rm $(docker ps -a -q) 
-          docker pull "${{ secrets.DOCKERHUB_USERNAME }}"/dogfight-server
-          docker run -d -p 8080:8080 --name dogserver "${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
+        script: whoami
+        # script: |
+        #   docker stop $(docker ps -a -q) 
+        #   docker rm $(docker ps -a -q) 
+        #   docker pull "${{ secrets.DOCKERHUB_USERNAME }}"/dogfight-server
+        #   docker run -d -p 8080:8080 --name dogserver "${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
