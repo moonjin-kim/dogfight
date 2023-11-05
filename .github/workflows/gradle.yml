@@ -61,3 +61,5 @@ jobs:
     # 5. Docker Hub 이미지 푸시
     - name: docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
+
+    # 6. 서버 접속하여 도커 이미지를 pull 받고 실행
