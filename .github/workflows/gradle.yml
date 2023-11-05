@@ -69,6 +69,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER_NAME }}
         password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
         script: |
           docker stop $(docker ps -a -q) 
           docker rm $(docker ps -a -q) 
