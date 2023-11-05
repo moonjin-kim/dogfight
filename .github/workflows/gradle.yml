@@ -64,7 +64,7 @@ jobs:
 
     # 6. 서버 접속하여 도커 이미지를 pull 받고 실행
     - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
-      uses: appleboy/ssh-action@v0.1.6
+      uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
