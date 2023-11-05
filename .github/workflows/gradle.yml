@@ -66,7 +66,7 @@ jobs:
     - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: 192.168.0.1
+        host: 211.109.43.213
         username: dogman
         password: answls1543
         port: 22
