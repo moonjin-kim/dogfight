@@ -46,16 +46,14 @@ public class BoardService {
 
         Tag tag = findTagBy(request.getTag());
 
-        Board saveBoard = request.toEntity(user,vote,tag);
-
+        Board board = request.toEntity(user,vote,tag);
+        Board saveBoard = boardRepository.save(board);
 
         return BoardResponse.of(saveBoard);
     }
 
     private Tag findTagBy(String tag){
-        return tagRepository.findByName(tag).orElse(
-                createTag(tag)
-        );
+        return tagRepository.findByName(tag).orElseGet(()->createTag(tag));
     }
 
     private Tag createTag(String tag){

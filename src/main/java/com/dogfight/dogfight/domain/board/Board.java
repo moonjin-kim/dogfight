@@ -1,5 +1,6 @@
 package com.dogfight.dogfight.domain.board;
 
+import com.dogfight.dogfight.domain.BaseEntity;
 import com.dogfight.dogfight.domain.tag.Tag;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.vote.Vote;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Board {
+public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

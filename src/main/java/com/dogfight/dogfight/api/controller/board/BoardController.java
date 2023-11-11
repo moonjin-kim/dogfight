@@ -6,10 +6,8 @@ import com.dogfight.dogfight.api.service.board.BoardService;
 import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -26,4 +24,5 @@ public class BoardController {
                 boardService.create(request.toServiceRequest(),localDateTime)
         );
     }
+
 }
