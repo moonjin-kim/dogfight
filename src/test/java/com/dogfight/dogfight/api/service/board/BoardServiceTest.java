@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -183,7 +184,63 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         List<Vote> votes = voteRepository.findAll();
         assertThat(votes).hasSize(1);
+    }
 
+    @DisplayName("등록된 게시글을 id로 조회할 수 있다.")
+    @Test
+    void readBoard() throws Exception {
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/image/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/image/" + contentType2,
+                fileInputStream2);
+
+        String writer = "tester";
+        User user = User.builder()
+                .account("testUser")
+                .password("!test12345")
+                .nickname(writer)
+                .email("test123@gmail.com")
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
+        String tagName = "스포츠";
+
+        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
+                .title("축구선수 Goat는?")
+                .writer(writer)
+                .tag(tagName)
+                .content("메시 vs 호날두")
+                .option1("메시")
+                .option1Image(image1)
+                .option2("호날두")
+                .option2Image(image2)
+                .build();
+
+        Tag tag = Tag.builder()
+                .name(tagName)
+                .build();
+
+        Tag saveTag = tagRepository.save(tag);
+        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
+
+        //when
+        BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
+
+        //then
+        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
     }
 
 }

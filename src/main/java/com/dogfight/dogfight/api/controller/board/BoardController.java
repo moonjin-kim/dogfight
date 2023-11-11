@@ -25,4 +25,10 @@ public class BoardController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<BoardResponse> read(@PathVariable("id") Long id){
+        return ApiResponse.ok(
+                boardService.read(id)
+        );
+    }
 }

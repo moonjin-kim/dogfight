@@ -52,6 +52,12 @@ public class BoardService {
         return BoardResponse.of(saveBoard);
     }
 
+    public BoardResponse read(Long id){
+        Board board = boardRepository.findById(id).orElseThrow();
+
+        return BoardResponse.of(board);
+    }
+
     private Tag findTagBy(String tag){
         return tagRepository.findByName(tag).orElseGet(()->createTag(tag));
     }
