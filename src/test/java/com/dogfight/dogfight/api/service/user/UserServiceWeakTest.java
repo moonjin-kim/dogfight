@@ -1,7 +1,7 @@
 package com.dogfight.dogfight.api.service.user;
 
 import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
-import com.dogfight.dogfight.api.service.user.response.UserResponse;
+import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class UserServiceWeakTest {
                 .build();
 
         //when
-        UserResponse response = userService.register(request, registeredDateTime);
+        UserServiceResponse response = userService.register(request, registeredDateTime);
 
 
         //then
