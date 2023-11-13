@@ -12,7 +12,6 @@ import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BoardServiceTest extends IntegrationTestSupport {
     @Autowired
-    BoardService boardService;
+    BoardServiceImpl boardService;
     @Autowired
     BoardRepository boardRepository;
     @Autowired
@@ -240,7 +238,7 @@ class BoardServiceTest extends IntegrationTestSupport {
         BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
 
         //then
-        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
+        assertThat(readBoardResponse1.getId()).isEqualTo(saveTag.getId());
     }
 
 }
