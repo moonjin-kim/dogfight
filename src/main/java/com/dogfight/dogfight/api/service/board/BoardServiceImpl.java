@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Transactional
 @RequiredArgsConstructor
@@ -52,12 +53,14 @@ public class BoardServiceImpl {
     }
 
     public BoardResponse read(Long id){
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
+        );
 
         return BoardResponse.of(board);
     }
 
-    public boolean delete(Long id){
+    public Boolean delete(Long id){
         boardRepository.deleteById(id);
 
         return true;

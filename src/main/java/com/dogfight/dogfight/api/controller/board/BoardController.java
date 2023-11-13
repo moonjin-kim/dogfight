@@ -29,4 +29,11 @@ public class BoardController {
                 boardService.read(id)
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Boolean> delete(@PathVariable("id") Long id){
+        return ApiResponse.ok(
+                boardService.delete(id)
+        );
+    }
 }

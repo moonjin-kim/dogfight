@@ -21,8 +21,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 class BoardServiceTest extends IntegrationTestSupport {
@@ -241,4 +243,71 @@ class BoardServiceTest extends IntegrationTestSupport {
         assertThat(readBoardResponse1.getId()).isEqualTo(saveTag.getId());
     }
 
+    @DisplayName("등록되지 않은 게시글 id로 조회하면 예외가 발생한다.")
+    @Test
+    void readBoardWithOutId() throws Exception {
+        //then
+        assertThatThrownBy(() -> boardService.read(1L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("게시글을 조회할 수 없습니다.");
+
+    }
+
+    @DisplayName("등록된 게시글을 id로 삭제할 수 있다.")
+    @Test
+    void deleteBoard() throws Exception {
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/image/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/image/" + contentType2,
+                fileInputStream2);
+
+        String writer = "tester";
+        User user = User.builder()
+                .account("testUser")
+                .password("!test12345")
+                .nickname(writer)
+                .email("test123@gmail.com")
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
+        String tagName = "스포츠";
+
+        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
+                .title("축구선수 Goat는?")
+                .writer(writer)
+                .tag(tagName)
+                .content("메시 vs 호날두")
+                .option1("메시")
+                .option1Image(image1)
+                .option2("호날두")
+                .option2Image(image2)
+                .build();
+
+        Tag tag = Tag.builder()
+                .name(tagName)
+                .build();
+
+        tagRepository.save(tag);
+        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
+        boardService.delete(saveBoardResponse.getId());
+
+        //when
+        assertThatThrownBy(() -> boardService.read(saveBoardResponse.getId()))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("게시글을 조회할 수 없습니다.");
+
+    }
 }
