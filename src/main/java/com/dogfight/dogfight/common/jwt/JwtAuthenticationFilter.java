@@ -2,6 +2,7 @@ package com.dogfight.dogfight.common.jwt;
 
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,5 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
     }
+
 
 }

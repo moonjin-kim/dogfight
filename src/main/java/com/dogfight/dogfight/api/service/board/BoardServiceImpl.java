@@ -14,6 +14,7 @@ import com.dogfight.dogfight.domain.vote.VoteRepository;
 import com.dogfight.dogfight.domain.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,7 @@ public class BoardServiceImpl {
 
     public BoardResponse create(BoardCreateServiceRequest request, LocalDateTime localDateTime){
 
-        User user = userRepository.findByNickname(request.getWriter());
+        User user = userRepository.findByAccount(request.getWriter());
 
         Vote vote = createVote(request.getOption1(),
                 request.getOption2(),

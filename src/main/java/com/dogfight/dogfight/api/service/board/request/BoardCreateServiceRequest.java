@@ -9,10 +9,11 @@ import lombok.Getter;
 import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
-public class BoardCreateServiceRequest {
+public class BoardCreateServiceRequest implements Serializable {
     String title;
     String writer;
     String content;
