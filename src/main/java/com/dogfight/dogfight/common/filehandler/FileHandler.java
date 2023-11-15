@@ -1,6 +1,7 @@
 package com.dogfight.dogfight.common.filehandler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @Component
 public class FileHandler {
+    @Value("${spring.file.upload-dir}")
+    private String uploadDir;
 
     /**
      *
@@ -32,10 +35,12 @@ public class FileHandler {
 
         // 프로젝트 디렉터리 내의 저장을 위한 절대 경로 설정
         // 경로 구분자 File.separator 사용
-        String absolutePath = new File("").getAbsolutePath() + File.separator;
+        String absolutePath = new File(uploadDir).getAbsolutePath() + File.separator;
+
+        log.info(absolutePath);
 
         String path = "images" + File.separator + current_date;
-        File file = new File(path);
+        File file = new File(absolutePath + path);
 
         if(!file.exists()) {
             boolean wasSuccessful = file.mkdirs();
@@ -67,8 +72,8 @@ public class FileHandler {
 
         // 파일명 중복 피하고자 나노초까지 얻어와 지정
         String new_file_name = absolutePath + path + File.separator + System.nanoTime() + originalFileExtension;
-        String save_name = File.separator + System.nanoTime() + originalFileExtension;
-
+        String save_name = path + File.separator + System.nanoTime() + originalFileExtension;
+        log.info(new_file_name);
 
         file = new File(new_file_name);
         multipartFile.transferTo(file);
