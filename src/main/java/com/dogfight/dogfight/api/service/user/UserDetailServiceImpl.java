@@ -21,11 +21,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
-        User user = userRepository.findByAccount(account)
-                .orElseThrow(() -> {
-                    log.error("존재하지 않는 계정입니다");
-                    return new RuntimeException("존재하지 않는 계정입니다");
-                });
+        User user = userRepository.findByAccount(account);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         return new org

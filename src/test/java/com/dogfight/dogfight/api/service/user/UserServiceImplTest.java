@@ -1,10 +1,8 @@
 package com.dogfight.dogfight.api.service.user;
 
-import com.dogfight.dogfight.api.service.user.request.UserLoginServiceRequest;
 import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
-import com.dogfight.dogfight.api.service.user.response.UserResponse;
+import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.domain.user.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -63,7 +60,7 @@ class UserServiceImplTest{
                 .build();
 
         //when
-        UserResponse userResponse = userService.register(userRegisterServiceRequest, now);
+        UserServiceResponse userResponse = userService.register(userRegisterServiceRequest, now);
 
         //then
         assertThat(userResponse.getUserId()).isEqualTo("test");
@@ -83,7 +80,7 @@ class UserServiceImplTest{
                 .build();
 
         //when
-        UserResponse userResponse = userService.register(userRegisterServiceRequest, registerDateTime);
+        UserServiceResponse userResponse = userService.register(userRegisterServiceRequest, registerDateTime);
 
         assertThatThrownBy(() ->userService.register(userRegisterServiceRequest, registerDateTime))
                 .isInstanceOf(DataIntegrityViolationException.class);

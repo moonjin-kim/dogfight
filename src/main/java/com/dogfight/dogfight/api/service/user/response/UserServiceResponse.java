@@ -5,18 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserResponse {
+public class UserServiceResponse {
     private Long id;
     private String userId;
 
     @Builder
-    public UserResponse(Long id, String userId){
+    public UserServiceResponse(Long id, String userId){
         this.id = id;
         this.userId = userId;
     }
 
-    public static UserResponse of(User user){
-        return UserResponse.builder()
+    public static UserServiceResponse of(User user){
+        return UserServiceResponse.builder()
                 .id(user.getId())
                 .userId(user.getAccount())
                 .build();

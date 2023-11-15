@@ -2,27 +2,23 @@ package com.dogfight.dogfight.api.service.user;
 
 import com.dogfight.dogfight.api.service.user.request.UserServiceRefreshTokenRequest;
 import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
-import com.dogfight.dogfight.api.service.user.response.UserResponse;
+import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
-import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +34,7 @@ public class UserServiceImpl implements  UserService{
     private final PasswordEncoder bCryptPasswordEncoder;
     @Override
     @Transactional
-    public UserResponse register(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime) {
+    public UserServiceResponse register(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime) {
         User user = userLoginServiceRequest.toEntity();
 
         checkAccountDuplicate(user.getAccount());
@@ -46,7 +42,7 @@ public class UserServiceImpl implements  UserService{
 
         User savedUser = userRepository.save(user);
 
-        return UserResponse.of(savedUser);
+        return UserServiceResponse.of(savedUser);
     }
 
     @Override
@@ -57,8 +53,7 @@ public class UserServiceImpl implements  UserService{
             String account = userLoginServiceRequest.getAccount();
             String password = userLoginServiceRequest.getPassword();
 
-            User user = userRepository.findByAccount(account)
-                    .orElseThrow(() -> new BadCredentialsException("아이디 혹은 패스워드가 잘못되었습니다"));
+            User user = userRepository.findByAccount(account);
 
             if(!user.checkPassword(password,bCryptPasswordEncoder)) {
                 throw new BadCredentialsException("아이디 혹은 패스워드가 잘못되었습니다");
@@ -102,8 +97,7 @@ public class UserServiceImpl implements  UserService{
 
         String account = jwtProvider.getAccount(request.getRefreshToken());
 
-        User user = userRepository.findByAccount(account)
-                .orElseThrow(() -> new BadCredentialsException("존재하지 않는 계정입니다"));
+        User user = userRepository.findByAccount(account);
         userRepository.delete(user);
 
         return "회원탈퇴 되었습니다. 이용해주셔서 감사합니다.";
@@ -146,14 +140,14 @@ public class UserServiceImpl implements  UserService{
         return true;
     }
     // 중복 검사 메서드 (이미 존재하는 상품인지 확인하고, 있다면 에러를 throw한다)
-    private void checkAccountDuplicate(String name) {
-        if (isExistedAccount(name)) {
+    private void checkAccountDuplicate(String account) {
+        if (isExistedAccount(account)) {
             throw new DuplicateKeyException("이미 존재하는 아이디입니다."); //UnCheckedException으로 구현함
         }
     }
 
     // 이미 존재하는지 확인하는 메서드
-    private boolean isExistedAccount(String name) {
-        return userRepository.findByAccount(name).isPresent();
+    private boolean isExistedAccount(String account) {
+        return userRepository.accountExists(account);
     }
 }
