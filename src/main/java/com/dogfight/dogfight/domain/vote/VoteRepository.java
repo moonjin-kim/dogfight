@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote,Long> {
     @Modifying
-    @Query("UPDATE vote e SET e.option1Count = e.option1Count + 1 WHERE e.id = :id")
-    void incrementFirstOptionCount(@Param("id") Long id);
+    @Query("UPDATE Vote e SET e.option1Count = e.option1Count + 1 WHERE e.id = :id")
+    void incrementFirstOptionCount(Long id);
 
     @Modifying
-    @Query("UPDATE vote e SET e.option2Count = e.option2Count + 1 WHERE e.id = :id")
-    void incrementSecondOptionCount(@Param("id") Long id);
+    @Query("UPDATE Vote e SET e.option2Count = e.option2Count + 1 WHERE e.id = :id")
+    void incrementSecondOptionCount(Long id);
 }

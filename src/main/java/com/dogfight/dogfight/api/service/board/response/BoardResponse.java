@@ -5,10 +5,12 @@ import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.vote.Vote;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Slf4j
 public class BoardResponse {
     Long id;
     String title;

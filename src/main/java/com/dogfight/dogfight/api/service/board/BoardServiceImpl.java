@@ -48,8 +48,8 @@ public class BoardServiceImpl {
         Tag tag = findTagBy(request.getTag());
 
         Board board = request.toEntity(user,vote,tag);
-        Board saveBoard = boardRepository.save(board);
 
+        Board saveBoard = boardRepository.save(board);
         return BoardResponse.of(saveBoard);
     }
 
@@ -57,6 +57,7 @@ public class BoardServiceImpl {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
         );
+        log.info("board read={}",board.getId());
 
         return BoardResponse.of(board);
     }
@@ -83,7 +84,7 @@ public class BoardServiceImpl {
         String option1ImageUrl = saveImage(option1Image);
         String option2ImageUrl = saveImage(option2Image);
 
-        Vote vote = Vote.builder()
+        return Vote.builder()
                 .option1(option1)
                 .option2(option2)
                 .option1ImageUrl(option1ImageUrl)
@@ -91,8 +92,6 @@ public class BoardServiceImpl {
                 .option1Count(0)
                 .option2Count(0)
                 .build();
-
-        return voteRepository.save(vote);
     }
 
     private String saveImage(MultipartFile image){

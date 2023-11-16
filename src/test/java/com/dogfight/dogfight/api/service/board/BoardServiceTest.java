@@ -52,6 +52,8 @@ class BoardServiceTest extends IntegrationTestSupport {
         boardRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
         tagRepository.deleteAllInBatch();
+        voteRepository.deleteAllInBatch();
+        tagRepository.deleteAllInBatch();
     }
 
     @DisplayName("게시판을 저장한다")
@@ -73,7 +75,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "tester";
+        String writer = "testUser";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -103,7 +105,7 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         assertThat(boardResponse)
                 .extracting("title","writer","tag","content")
-                .contains("축구선수 Goat는?","tester","스포츠","메시 vs 호날두");
+                .contains("축구선수 Goat는?",writer,"스포츠","메시 vs 호날두");
 
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(1);
@@ -135,7 +137,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "tester";
+        String writer = "testUser";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -173,7 +175,7 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         assertThat(boardResponse)
                 .extracting("title","writer","tag","content")
-                .contains("축구선수 Goat는?","tester","스포츠","메시 vs 호날두");
+                .contains("축구선수 Goat는?",writer,"스포츠","메시 vs 호날두");
 
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(1);
@@ -205,7 +207,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "tester";
+        String writer = "testUser";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -272,7 +274,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "tester";
+        String writer = "testUser";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
