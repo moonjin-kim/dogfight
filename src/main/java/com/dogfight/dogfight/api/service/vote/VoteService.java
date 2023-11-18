@@ -18,6 +18,8 @@ public class VoteService {
             voteRepository.incrementFirstOptionCount(id);
         } else if(count == 2){
             voteRepository.incrementSecondOptionCount(id);
+        } else {
+            throw new IllegalArgumentException("잘못된 투표 번호 입니다.");
         }
 
         Vote result = voteRepository.findById(id).orElseThrow();
