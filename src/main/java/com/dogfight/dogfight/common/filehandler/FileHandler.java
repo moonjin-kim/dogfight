@@ -37,7 +37,6 @@ public class FileHandler {
         // 경로 구분자 File.separator 사용
         String absolutePath = new File(uploadDir).getAbsolutePath() + File.separator;
 
-        log.info(absolutePath);
 
         String path = "images" + File.separator + current_date;
         File file = new File(absolutePath + path);
@@ -81,5 +80,27 @@ public class FileHandler {
         file.setReadable(true);
 
         return save_name;
+    }
+
+    public void deleteFolder() {
+        File folder = new File(uploadDir);
+
+        try {
+            deleteFolder(folder);
+        } catch (Exception e) {
+            System.err.println("Error deleting folder: " + e.getMessage());
+        }
+    }
+
+    public static void deleteFolder(File folder) {
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteFolder(file);
+                }
+            }
+        }
+        folder.delete();
     }
 }

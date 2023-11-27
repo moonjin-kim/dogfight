@@ -14,6 +14,10 @@ import com.dogfight.dogfight.domain.vote.VoteRepository;
 import com.dogfight.dogfight.domain.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +55,17 @@ public class BoardServiceImpl {
 
         Board saveBoard = boardRepository.save(board);
         return BoardResponse.of(saveBoard);
+    }
+
+    public Page<BoardResponse> getBoardsPage(int pageNo, int pageSize, String criteria, String sort){
+        Pageable pageable = null;
+        if(sort.equals("ASC")){
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, criteria));
+        } else {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, criteria));
+        }
+
+        return boardRepository.findAll(pageable).map(BoardResponse::of);
     }
 
     public BoardResponse read(Long id){
