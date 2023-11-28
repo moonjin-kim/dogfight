@@ -1,13 +1,16 @@
 package com.dogfight.dogfight.api.service.board.response;
 
+import com.dogfight.dogfight.api.service.vote.response.VoteResponse;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.vote.Vote;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Slf4j
 public class BoardResponse {
     Long id;
     String title;
@@ -16,10 +19,10 @@ public class BoardResponse {
     LocalDateTime registeredDateTime;
     int views;
     String tag;
-    Vote vote;
+    VoteResponse vote;
 
     @Builder
-    public BoardResponse(Long id,String title, String writer,LocalDateTime registeredDateTime, String content, int views, String tag, Vote vote) {
+    public BoardResponse(Long id,String title, String writer,LocalDateTime registeredDateTime, String content, int views, String tag, VoteResponse vote) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -39,7 +42,7 @@ public class BoardResponse {
                 .registeredDateTime(board.getCreatedDateTime())
                 .views(board.getViews())
                 .tag(board.getTag().getName())
-                .vote(board.getVote())
+                .vote(VoteResponse.of(board.getVote()))
                 .build();
     }
 

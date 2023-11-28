@@ -32,7 +32,8 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    @OneToOne(mappedBy="board",cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="vote_id")
     private Vote vote;
 
     @Builder

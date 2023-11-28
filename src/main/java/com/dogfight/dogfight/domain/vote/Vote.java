@@ -22,8 +22,7 @@ public class Vote {
     private int option1Count;
     private int option2Count;
 
-    @OneToOne
-    @JoinColumn(name = "board_id")
+    @OneToOne(mappedBy = "vote",fetch = FetchType.LAZY)
     private Board board;
 
     @Builder

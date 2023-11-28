@@ -37,7 +37,6 @@ public class FileHandler {
         // 경로 구분자 File.separator 사용
         String absolutePath = new File(uploadDir).getAbsolutePath() + File.separator;
 
-        log.info(absolutePath);
 
         String path = "images" + File.separator + current_date;
         File file = new File(absolutePath + path);
@@ -59,7 +58,6 @@ public class FileHandler {
             throw new IllegalBlockSizeException("확장자 명이 존재하지 않음");
         }
         else {  // 확장자가 jpeg, png인 파일들만 받아서 처리
-            System.out.println("type : " +contentType);
             if(contentType.contains("image/jpeg"))
                 originalFileExtension = ".jpg";
             else if(contentType.contains("image/png"))
@@ -73,7 +71,6 @@ public class FileHandler {
         // 파일명 중복 피하고자 나노초까지 얻어와 지정
         String new_file_name = absolutePath + path + File.separator + System.nanoTime() + originalFileExtension;
         String save_name = path + File.separator + System.nanoTime() + originalFileExtension;
-        log.info(new_file_name);
 
         file = new File(new_file_name);
         multipartFile.transferTo(file);
@@ -83,5 +80,27 @@ public class FileHandler {
         file.setReadable(true);
 
         return save_name;
+    }
+
+    public void deleteFolder() {
+        File folder = new File(uploadDir);
+
+        try {
+            deleteFolder(folder);
+        } catch (Exception e) {
+            System.err.println("Error deleting folder: " + e.getMessage());
+        }
+    }
+
+    public static void deleteFolder(File folder) {
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteFolder(file);
+                }
+            }
+        }
+        folder.delete();
     }
 }

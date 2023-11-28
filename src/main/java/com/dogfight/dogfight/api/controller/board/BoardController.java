@@ -9,14 +9,11 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RequestMapping("/api/v0/board")
 @RestController
@@ -37,6 +34,15 @@ public class BoardController {
         return ApiResponse.ok(
                 boardService.create(request.toServiceRequest(option1Image, option2Image,account),localDateTime)
         );
+    }
+
+    @GetMapping
+    public ApiResponse<Page<BoardResponse>> getBoardsPage(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
+            @RequestParam(required = false, defaultValue = "0", value = "pageSize") int pageSize,
+            @RequestParam(required = false, defaultValue = "views", value = "page") String criteria,
+            @RequestParam(required = false, defaultValue = "DESC", value = "sort") String sort) {
+        return ApiResponse.ok(boardService.getBoardsPage(pageNo, pageSize, criteria, sort));
     }
 
     @GetMapping("/{id}")
