@@ -21,9 +21,6 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### Querydsl ###
-/src/main/generated
-
 ### IntelliJ IDEA ###
 .idea
 *.iws

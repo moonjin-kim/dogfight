@@ -3,7 +3,6 @@ package com.dogfight.dogfight.api.service.board;
 import com.dogfight.dogfight.IntegrationTestSupport;
 import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
-import com.dogfight.dogfight.common.filehandler.FileHandler;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.tag.Tag;
@@ -13,7 +12,6 @@ import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,7 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Slf4j
+
 class BoardServiceTest extends IntegrationTestSupport {
     @Autowired
     BoardServiceImpl boardService;
@@ -40,8 +38,6 @@ class BoardServiceTest extends IntegrationTestSupport {
     TagRepository tagRepository;
     @Autowired
     VoteRepository voteRepository;
-    @Autowired
-    FileHandler fileHandler;
 
     final String fileName1 = "messi";
     final String contentType1 = "jpeg";
@@ -56,9 +52,6 @@ class BoardServiceTest extends IntegrationTestSupport {
         boardRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
         tagRepository.deleteAllInBatch();
-        voteRepository.deleteAllInBatch();
-        tagRepository.deleteAllInBatch();
-        fileHandler.deleteFolder();
     }
 
     @DisplayName("게시판을 저장한다")
@@ -80,7 +73,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "testUser";
+        String writer = "tester";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -110,7 +103,7 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         assertThat(boardResponse)
                 .extracting("title","writer","tag","content")
-                .contains("축구선수 Goat는?",writer,"스포츠","메시 vs 호날두");
+                .contains("축구선수 Goat는?","tester","스포츠","메시 vs 호날두");
 
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(1);
@@ -142,7 +135,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "testUser";
+        String writer = "tester";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -180,7 +173,7 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         assertThat(boardResponse)
                 .extracting("title","writer","tag","content")
-                .contains("축구선수 Goat는?",writer,"스포츠","메시 vs 호날두");
+                .contains("축구선수 Goat는?","tester","스포츠","메시 vs 호날두");
 
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(1);
@@ -212,7 +205,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "testUser";
+        String writer = "tester";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -279,7 +272,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 "/image/" + contentType2,
                 fileInputStream2);
 
-        String writer = "testUser";
+        String writer = "tester";
         User user = User.builder()
                 .account("testUser")
                 .password("!test12345")
@@ -315,94 +308,6 @@ class BoardServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> boardService.read(saveBoardResponse.getId()))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("게시글을 조회할 수 없습니다.");
-
-    }
-
-    @DisplayName("게시판을 페이지 형식으로 조회 가능하다")
-    @Test
-    void getListBoard() throws Exception{
-        //given
-        LocalDateTime registeredDateTime = LocalDateTime.now();
-        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
-        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
-        MockMultipartFile image1 = new MockMultipartFile(
-                "images",
-                fileName1 + "." + contentType1,
-                "/image/" + contentType1,
-                fileInputStream1);
-
-        MockMultipartFile image2 = new MockMultipartFile(
-                "images",
-                fileName2 + "." + contentType2,
-                "/image/" + contentType2,
-                fileInputStream2);
-
-        String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
-
-        userRepository.save(user);
-
-        BoardCreateServiceRequest request1 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는3?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request2 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는2?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request3 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는1?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        //when
-        BoardResponse boardResponse1 = boardService.create(request1,registeredDateTime);
-        BoardResponse boardResponse2 = boardService.create(request2,registeredDateTime);
-        BoardResponse boardResponse3 = boardService.create(request2,registeredDateTime);
-
-        //then
-        assertThat(boardResponse1.getId()).isNotNull();
-
-        assertThat(boardResponse1)
-                .extracting("title","writer","tag","content")
-                .contains("축구선수 Goat는3?",writer,"스포츠","메시 vs 호날두");
-
-        log.info("pageTest : {}", boardService.getBoardsPage(0,5,"views","DESC").getContent().get(0).getTitle());
-
-        List<Board> boards = boardRepository.findAll();
-        assertThat(boards).hasSize(3);
-
-        List<Tag> tags = tagRepository.findAll();
-        assertThat(tags).hasSize(1);
-
-        List<Vote> votes = voteRepository.findAll();
-        assertThat(votes).hasSize(3);
 
     }
 }

@@ -2,11 +2,7 @@ package com.dogfight.dogfight.api.service.vote.response;
 
 import com.dogfight.dogfight.domain.vote.Vote;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-@Getter
 public class VoteResponse {
     private Long id;
     private String option1;
@@ -28,7 +24,6 @@ public class VoteResponse {
     }
 
     public static VoteResponse of(Vote vote){
-        log.info("vote ID = {}", vote.getId());
         return VoteResponse.builder()
                 .id(vote.getId())
                 .option1(vote.getOption1())

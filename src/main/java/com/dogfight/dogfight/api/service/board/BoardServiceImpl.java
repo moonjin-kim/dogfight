@@ -14,10 +14,6 @@ import com.dogfight.dogfight.domain.vote.VoteRepository;
 import com.dogfight.dogfight.domain.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,27 +48,15 @@ public class BoardServiceImpl {
         Tag tag = findTagBy(request.getTag());
 
         Board board = request.toEntity(user,vote,tag);
-
         Board saveBoard = boardRepository.save(board);
+
         return BoardResponse.of(saveBoard);
-    }
-
-    public Page<BoardResponse> getBoardsPage(int pageNo, int pageSize, String criteria, String sort){
-        Pageable pageable = null;
-        if(sort.equals("ASC")){
-            pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, criteria));
-        } else {
-            pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, criteria));
-        }
-
-        return boardRepository.findAll(pageable).map(BoardResponse::of);
     }
 
     public BoardResponse read(Long id){
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
         );
-        log.info("board read={}",board.getId());
 
         return BoardResponse.of(board);
     }
@@ -99,7 +83,7 @@ public class BoardServiceImpl {
         String option1ImageUrl = saveImage(option1Image);
         String option2ImageUrl = saveImage(option2Image);
 
-        return Vote.builder()
+        Vote vote = Vote.builder()
                 .option1(option1)
                 .option2(option2)
                 .option1ImageUrl(option1ImageUrl)
@@ -107,6 +91,8 @@ public class BoardServiceImpl {
                 .option1Count(0)
                 .option2Count(0)
                 .build();
+
+        return voteRepository.save(vote);
     }
 
     private String saveImage(MultipartFile image){
