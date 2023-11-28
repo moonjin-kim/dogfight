@@ -32,6 +32,19 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
         return null;
     }
 
+    @Override
+    public Board increaseViewsAndReturnBoard(long id) {
+        queryFactory.update(qBoard)
+                .set(qBoard.views, qBoard.views.add(1))
+                .where(qBoard.id.eq(id))
+                .execute();
+
+        return queryFactory
+                .selectFrom(qBoard)
+                .where(qBoard.id.eq(id))
+                .fetchOne();
+    }
+
     private OrderSpecifier[] getSortCondition(final Sort sort) {
         final List<OrderSpecifier> orders = new ArrayList<>();
 

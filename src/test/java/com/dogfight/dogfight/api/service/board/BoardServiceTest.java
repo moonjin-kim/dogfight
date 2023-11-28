@@ -247,7 +247,65 @@ class BoardServiceTest extends IntegrationTestSupport {
         BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
 
         //then
-        assertThat(readBoardResponse1.getId()).isEqualTo(saveTag.getId());
+        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
+    }
+
+    @DisplayName("등록된 게시글을 id로 조회할 수 있다.")
+    @Test
+    void readBoardToIncreaseViews() throws Exception {
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/image/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/image/" + contentType2,
+                fileInputStream2);
+
+        String writer = "testUser";
+        User user = User.builder()
+                .account("testUser")
+                .password("!test12345")
+                .nickname(writer)
+                .email("test123@gmail.com")
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
+        String tagName = "스포츠";
+
+        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
+                .title("축구선수 Goat는?")
+                .writer(writer)
+                .tag(tagName)
+                .content("메시 vs 호날두")
+                .option1("메시")
+                .option1Image(image1)
+                .option2("호날두")
+                .option2Image(image2)
+                .build();
+
+        Tag tag = Tag.builder()
+                .name(tagName)
+                .build();
+
+        Tag saveTag = tagRepository.save(tag);
+        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
+
+        //when
+        BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
+
+        //then
+        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
+        assertThat(readBoardResponse1.getViews()).isEqualTo(1);
     }
 
     @DisplayName("등록되지 않은 게시글 id로 조회하면 예외가 발생한다.")
@@ -255,8 +313,8 @@ class BoardServiceTest extends IntegrationTestSupport {
     void readBoardWithOutId() throws Exception {
         //then
         assertThatThrownBy(() -> boardService.read(1L))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("게시글을 조회할 수 없습니다.");
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("존재하지 않는 게시글입니다.");
 
     }
 
@@ -313,8 +371,8 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         //when
         assertThatThrownBy(() -> boardService.read(saveBoardResponse.getId()))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("게시글을 조회할 수 없습니다.");
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("존재하지 않는 게시글입니다.");
 
     }
 

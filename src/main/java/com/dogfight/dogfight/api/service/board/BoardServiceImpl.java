@@ -69,10 +69,15 @@ public class BoardServiceImpl {
     }
 
     public BoardResponse read(Long id){
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
-        );
-        log.info("board read={}",board.getId());
+//        Board board = boardRepository.findById(id).orElseThrow(
+//                () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
+//        );
+
+        Board board = boardRepository.increaseViewsAndReturnBoard(id);
+
+        if (board == null) {
+            throw new NullPointerException("존재하지 않는 게시글입니다.");
+        }
 
         return BoardResponse.of(board);
     }
