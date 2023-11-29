@@ -24,11 +24,11 @@ public class Board extends BaseEntity {
 
     private int views;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
@@ -42,6 +42,13 @@ public class Board extends BaseEntity {
         this.content = content;
         this.views = views;
         this.user = user;
+        this.tag = tag;
+        this.vote = vote;
+    }
+
+    public void updateBoard(String title, String content, Tag tag, Vote vote) {
+        this.title = title;
+        this.content = content;
         this.tag = tag;
         this.vote = vote;
     }

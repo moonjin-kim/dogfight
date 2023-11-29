@@ -4,16 +4,12 @@ import com.dogfight.dogfight.api.service.board.BoardServiceImpl;
 import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.api.service.vote.response.VoteResponse;
-import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
-import com.dogfight.dogfight.domain.tag.Tag;
 import com.dogfight.dogfight.domain.tag.TagRepository;
 import com.dogfight.dogfight.domain.user.Role;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
-import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +19,9 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class VoteServiceTest {
@@ -43,7 +37,7 @@ class VoteServiceTest {
     @Autowired
     VoteRepository voteRepository;
     @Autowired
-    VoteService voteService;
+    VoteServiceImpl voteService;
 
     final String fileName1 = "messi";
     final String contentType1 = "jpeg";

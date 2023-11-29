@@ -2,10 +2,9 @@ package com.dogfight.dogfight.api.controller.board;
 
 import com.dogfight.dogfight.api.ApiResponse;
 import com.dogfight.dogfight.api.controller.board.request.BoardCreateRequest;
-import com.dogfight.dogfight.api.service.board.BoardServiceImpl;
+import com.dogfight.dogfight.api.service.board.BoardService;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 public class BoardController {
-    private final BoardServiceImpl boardService;
+    private final BoardService boardService;
     private final JwtProvider jwtProvider;
     @PostMapping("/new")
     public ApiResponse<BoardResponse> create(BoardCreateRequest request,

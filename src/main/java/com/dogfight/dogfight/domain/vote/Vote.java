@@ -35,4 +35,9 @@ public class Vote {
         this.option1Count = option1Count;
         this.option2Count = option2Count;
     }
+
+    public void updateImages(String option1ImageUrl, String option2ImageUrl) {
+        this.option1ImageUrl = option1ImageUrl;
+        this.option1ImageUrl = option2ImageUrl;
+    }
 }

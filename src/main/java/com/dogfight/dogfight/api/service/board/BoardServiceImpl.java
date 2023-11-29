@@ -1,6 +1,7 @@
 package com.dogfight.dogfight.api.service.board;
 
 import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest;
+import com.dogfight.dogfight.api.service.board.request.BoardUpdateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.filehandler.FileHandler;
 import com.dogfight.dogfight.domain.board.Board;
@@ -30,7 +31,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class BoardServiceImpl {
+public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final VoteRepository voteRepository;
@@ -69,9 +70,6 @@ public class BoardServiceImpl {
     }
 
     public BoardResponse read(Long id){
-//        Board board = boardRepository.findById(id).orElseThrow(
-//                () -> new NoSuchElementException("게시글을 조회할 수 없습니다.")
-//        );
 
         Board board = boardRepository.increaseViewsAndReturnBoard(id);
 
@@ -80,6 +78,20 @@ public class BoardServiceImpl {
         }
 
         return BoardResponse.of(board);
+    }
+
+    @Override
+    public BoardResponse update(BoardUpdateServiceRequest request) {
+        Board board = boardRepository.findById(request.getId()).orElseThrow(() ->
+                new NullPointerException("존재하지 않는 게시글입니다.")
+        );
+        Tag tag = findTagBy(request.getTag());
+        Vote vote = updateVoteImage(request.getVoteId(), request.getOption1Image(), request.getOption2Image());
+
+        board.updateBoard(request.getTitle(), request.getContent(),tag,vote);
+        Board updateBoard = boardRepository.save(board);
+
+        return BoardResponse.of(updateBoard);
     }
 
     public Boolean delete(Long id){
@@ -112,6 +124,19 @@ public class BoardServiceImpl {
                 .option1Count(0)
                 .option2Count(0)
                 .build();
+    }
+
+    private Vote updateVoteImage(Long id,  MultipartFile option1Image, MultipartFile option2Image) {
+        Vote vote = voteRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 투표입니다.")
+        );
+        //기존 이미지 삭제 로직 필요
+
+        String option1ImageUrl = saveImage(option1Image);
+        String option2ImageUrl = saveImage(option2Image);
+
+        vote.updateImages(option1ImageUrl,option2ImageUrl);
+        return voteRepository.save(vote);
     }
 
     private String saveImage(MultipartFile image){
