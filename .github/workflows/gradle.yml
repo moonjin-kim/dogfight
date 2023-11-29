@@ -31,18 +31,25 @@ jobs:
         java-version: 17
         distribution: 'adopt'
 
+    - name: make application.yml
+      run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
+      shell : bash
+
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
-      shell: bash
+      shell: bash 
         
       
     - name: Build with Gradle
       run: ./gradlew clean build --exclude-task test
       shell: bash
-        
+      
     # 3. Docker 이미지 빌드
     - name: docker image build
-      run: docker build -tag ${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server .
+      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server .   
 
     # 4. DockerHub 로그인
     - name: docker login
@@ -54,3 +61,18 @@ jobs:
     # 5. Docker Hub 이미지 푸시
     - name: docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/dogfight-server
+
+    # 6. 서버 접속하여 도커 이미지를 pull 받고 실행
+    - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        script: |
+          sudo su
+          docker stop $(docker ps -a -q) 
+          docker rm $(docker ps -a -q) 
+          docker pull "${{ secrets.DOCKERHUB_USERNAME }}"/dogfight-server
+          docker run -d -p 8080:8080 --name dogserver "${{ secrets.DOCKERHUB_USERNAME }}"/dogfight-server
