@@ -516,8 +516,8 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         //when
         BoardResponse boardResponse1 = boardService.create(request1,registeredDateTime);
-        BoardResponse boardResponse2 = boardService.create(request2,registeredDateTime);
-        BoardResponse boardResponse3 = boardService.create(request2,registeredDateTime);
+        boardService.create(request2,registeredDateTime);
+        boardService.create(request2,registeredDateTime);
 
         //then
         assertThat(boardResponse1.getId()).isNotNull();
