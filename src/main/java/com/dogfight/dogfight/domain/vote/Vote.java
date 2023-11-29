@@ -38,6 +38,6 @@ public class Vote {
 
     public void updateImages(String option1ImageUrl, String option2ImageUrl) {
         this.option1ImageUrl = option1ImageUrl;
-        this.option1ImageUrl = option2ImageUrl;
+        this.option2ImageUrl = option2ImageUrl;
     }
 }
