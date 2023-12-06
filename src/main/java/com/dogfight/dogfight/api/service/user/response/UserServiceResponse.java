@@ -6,19 +6,22 @@ import lombok.Getter;
 
 @Getter
 public class UserServiceResponse {
-    private Long id;
-    private String userId;
+    Long id;
+    String userId;
+    String nickname;
 
     @Builder
-    public UserServiceResponse(Long id, String userId){
+    public UserServiceResponse(Long id, String userId,String nickname){
         this.id = id;
         this.userId = userId;
+        this.nickname = nickname;
     }
 
     public static UserServiceResponse of(User user){
         return UserServiceResponse.builder()
                 .id(user.getId())
                 .userId(user.getAccount())
+                .nickname(user.getNickname())
                 .build();
     }
 }
