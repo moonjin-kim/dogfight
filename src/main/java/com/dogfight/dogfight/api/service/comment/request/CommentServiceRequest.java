@@ -9,24 +9,27 @@ import lombok.Getter;
 @Getter
 public class CommentServiceRequest {
     String content;
-    String account;
+    String nickname;
+    String password;
     Long boardId;
     Long parentId;
 
     @Builder
-    public CommentServiceRequest(String content, String account, Long boardId, Long parentId) {
+    public CommentServiceRequest(String content, String nickname, String password, Long boardId, Long parentId) {
         this.content = content;
-        this.account = account;
+        this.nickname = nickname;
+        this.password = password;
         this.boardId = boardId;
         this.parentId = parentId;
     }
 
-    public Comment toEntity(User user, Board board, Comment parent){
+    public Comment toEntity(Board board, Comment parent){
         return Comment.builder()
                 .content(content)
                 .board(board)
                 .parent(parent)
-                .user(user)
+                .nickname(nickname)
+                .password(password)
                 .build();
     }
 }

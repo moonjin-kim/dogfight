@@ -29,7 +29,7 @@ public class CommentController {
         String account = jwtProvider.getAccountFromHeader(httpServletRequest);
 
         return ApiResponse.ok(
-                commentService.create(request.toCommentServiceRequest(account))
+                commentService.create(request.toCommentServiceRequest())
         );
     }
 
@@ -41,7 +41,7 @@ public class CommentController {
         String account = jwtProvider.getAccountFromHeader(httpServletRequest);
 
         return ApiResponse.ok(
-                commentService.update(request.toCommentServiceRequest(account),id)
+                commentService.update(request.toCommentServiceRequest(),id)
         );
     }
 

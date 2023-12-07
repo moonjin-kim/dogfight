@@ -35,6 +35,6 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom{
             if (c.getParent() != null) commentDTOHashMap.get(c.getParent().getId()).getChildren().add(commentResponseDTO);
             else commentResponseDTOList.add(commentResponseDTO);
         });
-        return null;
+        return commentResponseDTOList;
     }
 }

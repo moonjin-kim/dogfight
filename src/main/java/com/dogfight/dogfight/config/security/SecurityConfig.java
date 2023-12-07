@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/api/v0/user/register",
                                 "/api/v0/user/refresh",
                                 "/api/v0/user/login",
-                                "/api/v0/board/read").permitAll()
+                                "/api/v0/board/read",
+                                "/api/v0/comment/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/comment/**").permitAll()
                         .anyRequest().authenticated()
                 )

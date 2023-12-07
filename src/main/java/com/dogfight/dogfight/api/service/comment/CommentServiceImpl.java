@@ -6,8 +6,6 @@ import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.comment.Comment;
 import com.dogfight.dogfight.domain.comment.CommentRepository;
-import com.dogfight.dogfight.domain.user.User;
-import com.dogfight.dogfight.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,15 +17,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class CommentServiceImpl implements CommentService{
-    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     @Override
     public String create(CommentServiceRequest request) {
-        User user = userRepository.findByAccount(request.getAccount());
-        if(user == null) {
-            throw new NullPointerException("존재하지 않는 유저입니다.");
-        }
 
         Board board = boardRepository.findById(request.getBoardId()).orElseThrow(() ->
                 new NullPointerException("존재하지 않는 게시글입니다.")
@@ -38,7 +31,7 @@ public class CommentServiceImpl implements CommentService{
             parent = commentRepository.findById(request.getParentId()).orElseThrow(() ->
                     new NullPointerException("존재하지 않는 댓글입니다.") );
         }
-        Comment comment = request.toEntity(user,board,parent);
+        Comment comment = request.toEntity(board,parent);
         commentRepository.save(comment);
 
         return "ok";
@@ -46,18 +39,14 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public String update(CommentServiceRequest request,Long id) {
-        User user = userRepository.findByAccount(request.getAccount());
-        if(user == null) {
-            throw new NullPointerException("존재하지 않는 유저입니다.");
-        }
+
 
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
             new NullPointerException("존재하지 않는 댓글입니다.")
         );
 
-        //댓글을 수정 가능한 유저인지 확인
-        if(!Objects.equals(comment.getUser().getId(), user.getId())) {
-            throw new NullPointerException("댓글을 수정할 수 없습니다");
+        if(!comment.getPassword().equals(request.getPassword())) {
+            throw new NullPointerException("잘못된 비밀번호 입니다");
         }
 
         comment.updateContent(request.getContent());
@@ -67,19 +56,14 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public String delete(Long id, String account) {
-        User user = userRepository.findByAccount(account);
-        if(user == null) {
-            throw new NullPointerException("존재하지 않는 유저입니다.");
-        }
+    public String delete(Long id, String password) {
 
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
                 new NullPointerException("존재하지 않는 댓글입니다.")
         );
 
-        //댓글을 수정 가능한 유저인지 확인
-        if(!Objects.equals(comment.getUser().getId(), user.getId())) {
-            throw new NullPointerException("댓글을 수정할 수 없습니다");
+        if(!comment.getPassword().equals(password)) {
+            throw new NullPointerException("잘못된 비밀번호 입니다");
         }
 
         comment.changeIsDeleted(true);
@@ -90,6 +74,10 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public List<CommentResponse> findAllCommentByBoardId(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() ->
+                new NullPointerException("존재하지 않는 게시글입니다.")
+        );
+
         return commentRepository.findAllByBoard(boardId);
     }
 }

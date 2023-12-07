@@ -46,5 +46,17 @@ public class BoardResponse {
                 .build();
     }
 
-
+    @Override
+    public String toString() {
+        return "BoardResponse{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", writer='" + writer + '\'' +
+                ", content='" + content + '\'' +
+                ", registeredDateTime=" + registeredDateTime +
+                ", views=" + views +
+                ", tag='" + tag + '\'' +
+                ", vote=" + vote +
+                '}';
+    }
 }

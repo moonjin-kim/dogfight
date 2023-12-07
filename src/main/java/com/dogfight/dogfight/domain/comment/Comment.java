@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,14 @@ public class Comment extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String content;
 
-    @ColumnDefault("FALSE")
     @Column(nullable = false)
+    private String password;
+
+    private String nickname;
+
+    @ColumnDefault("FALSE")
     private Boolean isDeleted;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
@@ -46,11 +48,12 @@ public class Comment extends BaseEntity {
     private Board board;
 
     @Builder
-    public Comment(Long id, String content, Boolean isDeleted, User user, Comment parent, List<Comment> children, Board board) {
+    public Comment(Long id, String content, Boolean isDeleted, String nickname, String password, Comment parent, List<Comment> children, Board board) {
         this.id = id;
         this.content = content;
         this.isDeleted = isDeleted;
-        this.user = user;
+        this.nickname = nickname;
+        this.password = password;
         this.parent = parent;
         this.children = children;
         this.board = board;

@@ -5,22 +5,25 @@ import lombok.Builder;
 
 public class CommentRequest {
     String content;
-    String account;
+    String nickname;
+    String password;
     Long boardId;
     Long parentId;
 
     @Builder
-    public CommentRequest(String content, String account, Long boardId, Long parentId) {
+    public CommentRequest(String content, String nickname, String password, Long boardId, Long parentId) {
         this.content = content;
-        this.account = account;
+        this.nickname = nickname;
+        this.password = password;
         this.boardId = boardId;
         this.parentId = parentId;
     }
 
-    public CommentServiceRequest toCommentServiceRequest(String account) {
+    public CommentServiceRequest toCommentServiceRequest() {
         return CommentServiceRequest.builder()
                 .content(content)
-                .account(account)
+                .nickname(nickname)
+                .password(password)
                 .boardId(boardId)
                 .parentId(parentId)
                 .build();
