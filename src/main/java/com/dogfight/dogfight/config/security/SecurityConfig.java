@@ -6,6 +6,7 @@ import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -52,7 +53,12 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/","/api/v0/user/register","/api/v0/user/refresh","/api/v0/user/login").permitAll()
+                        .requestMatchers("/",
+                                "/api/v0/user/register",
+                                "/api/v0/user/refresh",
+                                "/api/v0/user/login",
+                                "/api/v0/board/read").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v0/comment/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

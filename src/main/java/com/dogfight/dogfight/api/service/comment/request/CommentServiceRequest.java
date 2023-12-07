@@ -4,7 +4,9 @@ import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.comment.Comment;
 import com.dogfight.dogfight.domain.user.User;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class CommentServiceRequest {
     String content;
     String account;

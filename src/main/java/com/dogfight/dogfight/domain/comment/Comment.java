@@ -41,6 +41,10 @@ public class Comment extends BaseEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     @Builder
     public Comment(Long id, String content, Boolean isDeleted, User user, Comment parent, List<Comment> children, Board board) {
         this.id = id;
@@ -52,12 +56,8 @@ public class Comment extends BaseEntity {
         this.board = board;
     }
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
-
-    public void updateBoard(Board board) {
-        this.board = board;
+    public void updateContent(String content) {
+        this.content = content;
     }
 
     public void changeIsDeleted(Boolean isDeleted) {

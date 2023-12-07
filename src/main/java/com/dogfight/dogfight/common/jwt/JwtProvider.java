@@ -141,6 +141,11 @@ public class JwtProvider {
         }
     }
 
+    public String getAccountFromHeader(HttpServletRequest httpServletRequest) {
+        String accessToken = resolveToken(httpServletRequest);
+        return getAccount(accessToken.replace("Bearer ", ""));
+    }
+
     public String getAccount(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }

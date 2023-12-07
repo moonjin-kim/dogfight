@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface CommentService {
     public String create(CommentServiceRequest request);
-    public String update(CommentServiceRequest request);
+    public String update(CommentServiceRequest request, Long id);
 
     public String delete(Long commentId, String writer);
 
-    public String findAllCommentByBoardId(Long boardId, String account);
+    public List<CommentResponse> findAllCommentByBoardId(Long boardId);
 
 }
