@@ -23,7 +23,7 @@ public class CommentController {
     private final JwtProvider jwtProvider;
 
     @PostMapping("/new")
-    public ApiResponse<String> create(CommentRequest request,
+    public ApiResponse<Long> create(CommentRequest request,
                                       HttpServletRequest httpServletRequest){
         LocalDateTime localDateTime = LocalDateTime.now();
         String account = jwtProvider.getAccountFromHeader(httpServletRequest);
@@ -34,7 +34,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<String> update(CommentRequest request,
+    public ApiResponse<Long> update(CommentRequest request,
                                       @RequestParam(value = "id") Long id,
                                       HttpServletRequest httpServletRequest) {
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<String> delete(@RequestParam(value = "id") Long id,
+    public ApiResponse<Long> delete(@RequestParam(value = "id") Long id,
                                       HttpServletRequest httpServletRequest) {
         LocalDateTime localDateTime = LocalDateTime.now();
         String account = jwtProvider.getAccountFromHeader(httpServletRequest);

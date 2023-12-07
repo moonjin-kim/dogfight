@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService{
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     @Override
-    public String create(CommentServiceRequest request) {
+    public Long create(CommentServiceRequest request) {
 
         Board board = boardRepository.findById(request.getBoardId()).orElseThrow(() ->
                 new NullPointerException("존재하지 않는 게시글입니다.")
@@ -32,13 +32,13 @@ public class CommentServiceImpl implements CommentService{
                     new NullPointerException("존재하지 않는 댓글입니다.") );
         }
         Comment comment = request.toEntity(board,parent);
-        commentRepository.save(comment);
+        Comment result = commentRepository.save(comment);
 
-        return "ok";
+        return result.getId();
     }
 
     @Override
-    public String update(CommentServiceRequest request,Long id) {
+    public Long update(CommentServiceRequest request,Long id) {
 
 
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
@@ -50,13 +50,13 @@ public class CommentServiceImpl implements CommentService{
         }
 
         comment.updateContent(request.getContent());
-        commentRepository.save(comment);
+        Comment result = commentRepository.save(comment);
 
-        return "ok";
+        return result.getId();
     }
 
     @Override
-    public String delete(Long id, String password) {
+    public Long delete(Long id, String password) {
 
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
                 new NullPointerException("존재하지 않는 댓글입니다.")
@@ -67,9 +67,9 @@ public class CommentServiceImpl implements CommentService{
         }
 
         comment.changeIsDeleted(true);
-        commentRepository.save(comment);
+        Comment result = commentRepository.save(comment);
 
-        return "ok";
+        return result.getId();
     }
 
     @Override
