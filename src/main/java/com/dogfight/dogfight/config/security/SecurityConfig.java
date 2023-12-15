@@ -29,9 +29,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
@@ -54,11 +58,13 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.httpBasic(httpB -> httpB.disable())
-                .csrf(csrf -> csrf.disable())
-                .cors(AbstractHttpConfigurer::disable);
+        http
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable);
 
 
         http.authorizeHttpRequests((requests) -> requests
@@ -66,10 +72,8 @@ public class SecurityConfig {
                                 "/api/v0/user/register",
                                 "/api/v0/user/refresh",
                                 "/api/v0/user/login",
-                                "/api/v0/board/read",
-                                "/api/v0/board/new",
-                                "/api/v0/comment/**").permitAll()
-                        .anyRequest().authenticated()
+                                "/api/v0/board/read").permitAll()
+                        .anyRequest().hasRole("USER")
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
@@ -90,7 +94,7 @@ public class SecurityConfig {
 
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {
-                ErrorResponse fail = new ErrorResponse("401", "expired");
+                ErrorResponse fail = new ErrorResponse("403", "expired");
                 response.setStatus(HttpStatus.FORBIDDEN.value());
                 String json = new ObjectMapper().writeValueAsString(fail);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);

@@ -4,6 +4,7 @@ import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class UserDetailServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
