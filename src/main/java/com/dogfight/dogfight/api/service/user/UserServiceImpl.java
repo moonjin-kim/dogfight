@@ -9,6 +9,7 @@ import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 @Service
 public class UserServiceImpl implements  UserService{
     private final UserRepository userRepository;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements  UserService{
     @Transactional
     public UserServiceResponse register(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime) {
         User user = userLoginServiceRequest.toEntity();
-
+        log.info("register");
         checkAccountDuplicate(user.getAccount());
         user.hashPassword(bCryptPasswordEncoder);
 
@@ -107,6 +108,7 @@ public class UserServiceImpl implements  UserService{
     @Transactional
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest, Date date) {
         String refreshToken = userServiceRefreshTokenRequest.getRefreshToken();
+        log.info("refreshService = {}", userServiceRefreshTokenRequest.getRefreshToken());
         //refresh Token 검증
         jwtProvider.validateToken("refresh",refreshToken);
 
@@ -115,7 +117,7 @@ public class UserServiceImpl implements  UserService{
 
         if(redisRefreshToken==null || !redisRefreshToken.equals(refreshToken)) {
             log.error("존재하지 않는 토큰입니다");
-            throw new RuntimeException("존재하지 않는 토큰입니다");
+            throw new NullPointerException("존재하지 않는 토큰입니다");
         }
 
         return UserTokenResponse.builder()

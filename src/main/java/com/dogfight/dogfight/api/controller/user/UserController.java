@@ -8,6 +8,7 @@ import com.dogfight.dogfight.api.service.user.UserService;
 import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 
 @RequestMapping("/api/v0/user")
 @RestController
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -32,6 +34,7 @@ public class UserController {
     @PostMapping("/login")
     public ApiResponse<UserTokenResponse> login(@RequestBody UserLoginRequest request) {
         Date localDateTime = new Date();
+        log.info("loginTest");
         return ApiResponse.ok(
                 userService.login(request.toServiceRequest(),localDateTime)
         );
@@ -59,6 +62,7 @@ public class UserController {
     @PostMapping("/refresh")
     public ApiResponse<UserTokenResponse> refresh(@RequestBody UserRefreshTokenRequest request){
         Date localDateTime = new Date();
+        log.info("refreshController = {}", request.getRefreshToken());
         return ApiResponse.ok(
                 userService.refresh(request.toService(), localDateTime)
         );

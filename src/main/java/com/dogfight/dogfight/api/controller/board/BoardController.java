@@ -5,6 +5,7 @@ import com.dogfight.dogfight.api.controller.board.request.BoardCreateRequest;
 import com.dogfight.dogfight.api.service.board.BoardService;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
+import com.dogfight.dogfight.domain.tag.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@CrossOrigin("*")
 @RequestMapping("/api/v0/board")
 @RestController
 @Slf4j
@@ -29,6 +32,7 @@ public class BoardController {
         LocalDateTime localDateTime = LocalDateTime.now();
         String accessToken = jwtProvider.resolveToken(httpServletRequest);
         String account = jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
+        log.info("board new controller");
 
         return ApiResponse.ok(
                 boardService.create(request.toServiceRequest(option1Image, option2Image,account),localDateTime)
@@ -42,6 +46,11 @@ public class BoardController {
             @RequestParam(required = false, defaultValue = "views", value = "page") String criteria,
             @RequestParam(required = false, defaultValue = "DESC", value = "sort") String sort) {
         return ApiResponse.ok(boardService.getBoardsPage(pageNo, pageSize, criteria, sort));
+    }
+
+    @GetMapping("/tag")
+    public ApiResponse<List<Tag>> getTag() {
+        return ApiResponse.ok(boardService.getTag());
     }
 
     @GetMapping("/{id}")

@@ -119,16 +119,12 @@ public class JwtProvider {
         try{
             System.out.println(token);
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-            System.out.println("정상");
             return true;
         } catch (ExpiredJwtException e){
             log.error(type + " : 토큰이 만료되었습니다");
-            ResponseStatusException tokenExpiredException
-                    = new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, type+ "type : 토큰이 만료되었습니다.");
 
-
-            throw tokenExpiredException;
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, type+ " type : 토큰이 만료되었습니다.");
         } catch (Exception e){
             log.error("토큰이 이상해요 : " + token);
 

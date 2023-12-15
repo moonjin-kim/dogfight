@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Transactional
@@ -92,6 +93,11 @@ public class BoardServiceImpl implements BoardService{
         Board updateBoard = boardRepository.save(board);
 
         return BoardResponse.of(updateBoard);
+    }
+
+    @Override
+    public List<Tag> getTag() {
+        return tagRepository.findAll();
     }
 
     public Boolean delete(Long id){
