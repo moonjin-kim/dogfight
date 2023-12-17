@@ -63,7 +63,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
 
 
@@ -73,7 +73,7 @@ public class SecurityConfig {
                                 "/api/v0/user/refresh",
                                 "/api/v0/user/login",
                                 "/api/v0/board/read").permitAll()
-                        .anyRequest().hasRole("USER")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)

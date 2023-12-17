@@ -25,7 +25,6 @@ public class BoardController {
     private final BoardService boardService;
     private final JwtProvider jwtProvider;
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/new")
     public ApiResponse<BoardResponse> create(BoardCreateRequest request,
                                              HttpServletRequest httpServletRequest,

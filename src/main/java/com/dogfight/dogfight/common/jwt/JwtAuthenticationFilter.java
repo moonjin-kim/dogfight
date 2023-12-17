@@ -31,9 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String accessToken = jwtProvider.resolveToken(request);
-        request.getHeaderNames().asIterator()
-                .forEachRemaining(headerName -> System.out.println(headerName + ": " + request.getHeader(headerName)));
-        log.info("doFilter : {}",request.toString());
+
         if(accessToken != null && jwtProvider.validateToken("access",accessToken.replace("Bearer ", ""))){
             String account = jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
             jwtProvider.saveAuthentication(account);
