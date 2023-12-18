@@ -78,14 +78,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public boolean logout(UserServiceRefreshTokenRequest request) {
-        String refresh = request.getRefreshToken();
-
-        if(!jwtProvider.validateToken("refresh", refresh)){
-            throw new BadCredentialsException("로그아웃에 실패하였습니다");
-        }
-
-        String account = jwtProvider.getAccount(refresh);
+    public boolean logout(String account) {
 
         redisTemplate.delete(account);
 
@@ -93,12 +86,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public String withdraw(UserServiceRefreshTokenRequest request) {
-        if(!logout(request)){
-            return "유효하지 않은 계정입니다.";
-        }
-
-        String account = jwtProvider.getAccount(request.getRefreshToken());
+    public String withdraw(String account) {
 
         User user = userRepository.findByAccount(account);
         userRepository.delete(user);
@@ -145,10 +133,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public UserResponse getUser(HttpServletRequest httpServletRequest) {
-        String accessToken = jwtProvider.resolveToken(httpServletRequest);
-        String account = jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
-
+    public UserResponse getUser(String account) {
         User user = userRepository.findByAccount(account);
 
         return UserResponse.builder()

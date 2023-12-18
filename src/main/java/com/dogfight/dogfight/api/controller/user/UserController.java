@@ -24,6 +24,7 @@ import java.util.Date;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
@@ -45,20 +46,18 @@ public class UserController {
 
     }
 
-    @PostMapping("/logout")
-    public ApiResponse<Boolean> logout(@RequestBody UserRefreshTokenRequest request) {
-        LocalDateTime localDateTime = LocalDateTime.now();
+    @GetMapping("/logout")
+    public ApiResponse<Boolean> logout(HttpServletRequest httpServletRequest) {
         return ApiResponse.ok(
-                userService.logout(request.toService())
+                userService.logout(getAccountByReqBody(httpServletRequest))
         );
 
     }
 
     @DeleteMapping
-    public ApiResponse<String> withdraw(@RequestBody UserRefreshTokenRequest request) {
-        LocalDateTime localDateTime = LocalDateTime.now();
+    public ApiResponse<String> withdraw(HttpServletRequest httpServletRequest) {
         return ApiResponse.ok(
-                userService.withdraw(request.toService())
+                userService.withdraw(getAccountByReqBody(httpServletRequest))
         );
 
     }
@@ -76,7 +75,12 @@ public class UserController {
     public ApiResponse<UserResponse> getUser(HttpServletRequest httpServletRequest) {
 
         return ApiResponse.ok(
-                userService.getUser(httpServletRequest)
+                userService.getUser(getAccountByReqBody(httpServletRequest))
         );
+    }
+
+    public String getAccountByReqBody(HttpServletRequest httpServletRequest) {
+        String accessToken = jwtProvider.resolveToken(httpServletRequest);
+        return jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
     }
 }

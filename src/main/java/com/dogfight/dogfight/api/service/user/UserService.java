@@ -16,14 +16,14 @@ public interface UserService {
 
     public UserTokenResponse login(UserRegisterServiceRequest userLoginServiceRequest, Date date);
 
-    public boolean logout(UserServiceRefreshTokenRequest request);
+    public boolean logout(String account);
 
-    public String withdraw(UserServiceRefreshTokenRequest request);
+    public String withdraw(String account);
 
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest,Date date);
 
     public boolean ConfirmationPassword(String pwd);
 
-    public UserResponse getUser(HttpServletRequest httpServletRequest);
+    public UserResponse getUser(String account);
 
 }
