@@ -2,8 +2,10 @@ package com.dogfight.dogfight.api.service.user;
 
 import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
 import com.dogfight.dogfight.api.service.user.request.UserServiceRefreshTokenRequest;
+import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -21,5 +23,7 @@ public interface UserService {
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest,Date date);
 
     public boolean ConfirmationPassword(String pwd);
+
+    public UserResponse getUser(HttpServletRequest httpServletRequest);
 
 }

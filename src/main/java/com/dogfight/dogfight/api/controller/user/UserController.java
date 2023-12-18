@@ -5,8 +5,11 @@ import com.dogfight.dogfight.api.controller.user.request.UserLoginRequest;
 import com.dogfight.dogfight.api.controller.user.request.UserRefreshTokenRequest;
 import com.dogfight.dogfight.api.controller.user.request.UserRegisterRequest;
 import com.dogfight.dogfight.api.service.user.UserService;
+import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
+import com.dogfight.dogfight.common.jwt.JwtProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import java.util.Date;
 public class UserController {
     @Autowired
     private UserService userService;
+    private JwtProvider jwtProvider;
 
     @PostMapping("/register")
     public ApiResponse<UserServiceResponse> register(@RequestBody @Valid UserRegisterRequest request) {
@@ -65,6 +69,14 @@ public class UserController {
         log.info("refreshController = {}", request.getRefreshToken());
         return ApiResponse.ok(
                 userService.refresh(request.toService(), localDateTime)
+        );
+    }
+
+    @GetMapping
+    public ApiResponse<UserResponse> getUser(HttpServletRequest httpServletRequest) {
+
+        return ApiResponse.ok(
+                userService.getUser(httpServletRequest)
         );
     }
 }

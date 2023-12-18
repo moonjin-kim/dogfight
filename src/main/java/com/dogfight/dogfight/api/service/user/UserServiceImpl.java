@@ -2,11 +2,13 @@ package com.dogfight.dogfight.api.service.user;
 
 import com.dogfight.dogfight.api.service.user.request.UserServiceRefreshTokenRequest;
 import com.dogfight.dogfight.api.service.user.request.UserRegisterServiceRequest;
+import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -141,6 +143,20 @@ public class UserServiceImpl implements  UserService{
         }
         return true;
     }
+
+    @Override
+    public UserResponse getUser(HttpServletRequest httpServletRequest) {
+        String accessToken = jwtProvider.resolveToken(httpServletRequest);
+        String account = jwtProvider.getAccount(accessToken.replace("Bearer ", ""));
+
+        User user = userRepository.findByAccount(account);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .build();
+    }
+
     // 중복 검사 메서드 (이미 존재하는 상품인지 확인하고, 있다면 에러를 throw한다)
     private void checkAccountDuplicate(String account) {
         if (isExistedAccount(account)) {
