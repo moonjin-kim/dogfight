@@ -4,6 +4,8 @@ import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest
 import com.dogfight.dogfight.api.service.board.request.BoardUpdateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.filehandler.FileHandler;
+import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.heart.HeartRepository;
@@ -75,7 +77,7 @@ public class BoardServiceImpl implements BoardService{
         Board board = boardRepository.increaseViewsAndReturnBoard(id);
 
         if (board == null) {
-            throw new NullPointerException("존재하지 않는 게시글입니다.");
+            throw new CustomException("존재하지 않는 게시글입니다.", ErrorCode.BOARD_NOT_FOUND);
         }
 
         return BoardResponse.of(board);
@@ -84,7 +86,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardResponse update(BoardUpdateServiceRequest request) {
         Board board = boardRepository.findById(request.getId()).orElseThrow(() ->
-                new NullPointerException("존재하지 않는 게시글입니다.")
+         new CustomException("존재하지 않는 게시글입니다.", ErrorCode.BOARD_NOT_FOUND)
         );
         Tag tag = findTagBy(request.getTag());
         Vote vote = updateVoteImage(request.getVoteId(), request.getOption1Image(), request.getOption2Image());

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @Slf4j
-@RestControllerAdvice
 public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -27,12 +26,9 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadCredentialsException.class)
-    public ApiResponse<Object> badCredentialsException(BindException e){
+    public ResponseEntity<String> badCredentialsException(BindException e){
         log.info("BadCredentialsException");
-        return ApiResponse.of(
-                HttpStatus.BAD_REQUEST,
-                "test2",
-                null);
+        return new ResponseEntity<>("test",HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -41,7 +37,7 @@ public class ApiControllerAdvice {
         log.info("패스워드 에러");
         return ApiResponse.of(
                 HttpStatus.BAD_REQUEST,
-                "test3",
+                e.getMessage(),
                 null);
     }
 

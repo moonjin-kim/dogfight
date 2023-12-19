@@ -6,6 +6,8 @@ import com.dogfight.dogfight.api.service.user.response.UserResponse;
 import com.dogfight.dogfight.api.service.user.response.UserServiceResponse;
 import com.dogfight.dogfight.api.service.user.response.UserTokenResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
+import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,9 +59,10 @@ public class UserServiceImpl implements  UserService{
             String password = userLoginServiceRequest.getPassword();
 
             User user = userRepository.findByAccount(account);
+            log.info(user.getAccount());
 
             if(!user.checkPassword(password,bCryptPasswordEncoder)) {
-                throw new BadCredentialsException("아이디 혹은 패스워드가 잘못되었습니다");
+                throw new CustomException("아이디 혹은 패스워드가 잘못되었습니다", ErrorCode.BAD_CREDENTIALS_EXCEPTION);
             }
 
             String accessToken = jwtProvider.createAccessToken(user.getAccount(), date);
@@ -71,7 +74,7 @@ public class UserServiceImpl implements  UserService{
                     .build();
         } catch(BadCredentialsException e){
             log.error("아이디 혹은 패스워드가 잘못되었습니다");
-            throw new BadCredentialsException(e.getMessage());
+            throw new CustomException("아이디 혹은 패스워드가 잘못되었습니다", ErrorCode.BAD_CREDENTIALS_EXCEPTION);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
