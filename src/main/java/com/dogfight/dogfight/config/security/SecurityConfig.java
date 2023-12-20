@@ -72,7 +72,9 @@ public class SecurityConfig {
                                 "/api/v0/user/register",
                                 "/api/v0/user/refresh",
                                 "/api/v0/user/login",
-                                "/api/v0/board/read").permitAll()
+                                "/api/v0/board/read",
+                                "/api/v0/board/*",
+                                "/api/v0/images/*/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

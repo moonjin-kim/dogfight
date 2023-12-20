@@ -1,5 +1,7 @@
 package com.dogfight.dogfight.common.filehandler;
 
+import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,8 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.IllegalBlockSizeException;
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.apache.commons.io.IOUtils;
 
 @Slf4j
 @Component
@@ -27,6 +33,8 @@ public class FileHandler {
      */
     public String saveImage(MultipartFile multipartFile, LocalDateTime dateTime)
             throws Exception{
+
+        long currentTime = System.nanoTime();
 
         // 파일명을 업로드 한 날짜로 변환하여 저장
         DateTimeFormatter dateTimeFormatter =
@@ -69,8 +77,8 @@ public class FileHandler {
         }
 
         // 파일명 중복 피하고자 나노초까지 얻어와 지정
-        String new_file_name = absolutePath + path + File.separator + System.nanoTime() + originalFileExtension;
-        String save_name = path + File.separator + System.nanoTime() + originalFileExtension;
+        String new_file_name = absolutePath + path + File.separator + currentTime + originalFileExtension;
+        String save_name = path + File.separator + currentTime + originalFileExtension;
 
         file = new File(new_file_name);
         multipartFile.transferTo(file);
@@ -80,6 +88,20 @@ public class FileHandler {
         file.setReadable(true);
 
         return save_name;
+    }
+
+    public byte[] loadImage(String path) throws IOException {
+        String allPath = uploadDir +"images"+ path;
+        log.info(allPath);
+        File imageFile = new File(allPath);
+        if (imageFile.exists()) {
+            FileInputStream fileInputStream = new FileInputStream(imageFile);
+            byte[] imageBytes = IOUtils.toByteArray(fileInputStream);
+            fileInputStream.close();
+            return imageBytes;
+        } else{
+            throw new CustomException("이미지가 존재하지 않습니다.", ErrorCode.IMAGE_NOT_FOUND);
+        }
     }
 
     public void deleteFolder() {

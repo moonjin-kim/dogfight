@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 @Service
 public class UserServiceImpl implements  UserService{
     private final UserRepository userRepository;
-    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder bCryptPasswordEncoder;
