@@ -21,6 +21,7 @@ public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     @Override
     public Long create(CommentServiceRequest request) {
+        log.info(request.getBoardId().toString());
 
         Board board = boardRepository.findById(request.getBoardId()).orElseThrow(() ->
                 new NullPointerException("존재하지 않는 게시글입니다.")

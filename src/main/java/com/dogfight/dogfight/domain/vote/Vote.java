@@ -14,7 +14,6 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String option1;
     private String option2;
     private String option1ImageUrl;

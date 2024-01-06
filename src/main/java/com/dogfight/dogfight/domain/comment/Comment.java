@@ -18,6 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
+@Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
     @Id
@@ -31,6 +32,8 @@ public class Comment extends BaseEntity {
     private String password;
 
     private String nickname;
+
+    private Long selectId;
 
     @ColumnDefault("FALSE")
     private Boolean isDeleted;
@@ -48,13 +51,14 @@ public class Comment extends BaseEntity {
     private Board board;
 
     @Builder
-    public Comment(Long id, String content, Boolean isDeleted, String nickname, String password, Comment parent, List<Comment> children, Board board) {
+    public Comment(Long id, String content, Boolean isDeleted, Long selectId, String nickname, String password, Comment parent, List<Comment> children, Board board) {
         this.id = id;
         this.content = content;
         this.isDeleted = isDeleted;
         this.nickname = nickname;
         this.password = password;
         this.parent = parent;
+        this.selectId = selectId;
         this.children = children;
         this.board = board;
     }

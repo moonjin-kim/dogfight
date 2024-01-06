@@ -13,6 +13,8 @@ import java.util.List;
 @Slf4j
 public class CommentResponse {
     Long id;
+    Long boardId;
+    Long select;
     String content;
     String nickname;
     List<CommentResponse> children = new ArrayList<>();
@@ -20,8 +22,10 @@ public class CommentResponse {
 
 
     @Builder
-    public CommentResponse(Long id, String content, String nickname) {
+    public CommentResponse(Long id, Long boardId, Long select,String content, String nickname) {
         this.id = id;
+        this.boardId = boardId;
+        this.select = select;
         this.content = content;
         this.nickname = nickname;
     }
@@ -38,7 +42,7 @@ public class CommentResponse {
 
     public static CommentResponse convertCommentToDto(Comment comment) {
         return comment.getIsDeleted() == Boolean.FALSE ?
-                new CommentResponse(comment.getId(), "삭제된 댓글입니다.", null) :
-                new CommentResponse(comment.getId(), comment.getContent(), comment.getNickname());
+                new CommentResponse(comment.getId(), comment.getBoard().getId(), comment.getSelectId(),"삭제된 댓글입니다.", null) :
+                new CommentResponse(comment.getId(), comment.getBoard().getId(), comment.getSelectId() ,comment.getContent(), comment.getNickname());
     }
 }
