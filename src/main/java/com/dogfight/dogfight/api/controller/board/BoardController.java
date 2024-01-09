@@ -43,8 +43,8 @@ public class BoardController {
     @GetMapping
     public ApiResponse<Page<BoardResponse>> getBoardsPage(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
-            @RequestParam(required = false, defaultValue = "0", value = "pageSize") int pageSize,
-            @RequestParam(required = false, defaultValue = "views", value = "page") String criteria,
+            @RequestParam(required = false, defaultValue = "10", value = "pageSize") int pageSize,
+            @RequestParam(required = false, defaultValue = "views", value = "criteria") String criteria,
             @RequestParam(required = false, defaultValue = "DESC", value = "sort") String sort) {
         return ApiResponse.ok(boardService.getBoardsPage(pageNo, pageSize, criteria, sort));
     }
