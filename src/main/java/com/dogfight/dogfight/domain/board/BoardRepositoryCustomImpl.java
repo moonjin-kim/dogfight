@@ -3,6 +3,8 @@ package com.dogfight.dogfight.domain.board;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,6 +47,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                 .fetchOne();
     }
 
+    @Override
+    public BoardResponse selectRandBoard() {
+        Board board = queryFactory.selectFrom(qBoard)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .fetchFirst();
+        return BoardResponse.of(board);
+    }
+
     private OrderSpecifier[] getSortCondition(final Sort sort) {
         final List<OrderSpecifier> orders = new ArrayList<>();
 
@@ -75,4 +85,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
         }
 
     }
+
+
 }

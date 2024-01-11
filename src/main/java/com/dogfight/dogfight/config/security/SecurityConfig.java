@@ -75,6 +75,7 @@ public class SecurityConfig {
                                 "/api/v0/board/read",
                                 "/api/v0/board/*",
                                 "/api/v0/board",
+                                "/api/vo/board/next",
                                 "/api/v0/comment/new",
                                 "/api/v0/vote/*/*",
                                 "/api/v0/comment/*",

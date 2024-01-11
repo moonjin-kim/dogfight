@@ -84,6 +84,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    public BoardResponse next() {
+        return boardRepository.selectRandBoard();
+    }
+
+    @Override
     public BoardResponse update(BoardUpdateServiceRequest request) {
         Board board = boardRepository.findById(request.getId()).orElseThrow(() ->
          new CustomException("존재하지 않는 게시글입니다.", ErrorCode.BOARD_NOT_FOUND)

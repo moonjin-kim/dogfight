@@ -5,6 +5,7 @@ import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest
 import com.dogfight.dogfight.api.service.board.request.BoardUpdateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.filehandler.FileHandler;
+import com.dogfight.dogfight.config.error.CustomException;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.tag.Tag;
@@ -388,7 +389,7 @@ class BoardServiceTest extends IntegrationTestSupport {
     void readBoardWithOutId() throws Exception {
         //then
         assertThatThrownBy(() -> boardService.read(1L))
-                .isInstanceOf(NullPointerException.class)
+                .isInstanceOf(CustomException.class)
                 .hasMessage("존재하지 않는 게시글입니다.");
 
     }
@@ -446,7 +447,7 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         //when
         assertThatThrownBy(() -> boardService.read(saveBoardResponse.getId()))
-                .isInstanceOf(NullPointerException.class)
+                .isInstanceOf(CustomException.class)
                 .hasMessage("존재하지 않는 게시글입니다.");
 
     }

@@ -40,6 +40,13 @@ public class BoardController {
         );
     }
 
+    @GetMapping("next")
+    public ApiResponse<BoardResponse> next() {
+        return ApiResponse.ok(
+                boardService.next()
+        );
+    }
+
     @GetMapping
     public ApiResponse<Page<BoardResponse>> getBoardsPage(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,

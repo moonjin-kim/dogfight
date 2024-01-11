@@ -13,6 +13,7 @@ public interface BoardService {
     public BoardResponse create(BoardCreateServiceRequest request, LocalDateTime localDateTime);
     public Page<BoardResponse> getBoardsPage(int pageNo, int pageSize, String criteria, String sort);
     public BoardResponse read(Long id);
+    public BoardResponse next();
     public BoardResponse update(BoardUpdateServiceRequest request);
     public List<Tag> getTag();
     public Boolean delete(Long id);
