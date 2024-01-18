@@ -10,6 +10,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -24,15 +25,16 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
     QBoard qBoard = QBoard.board;
     QTag qTag = QTag.tag;
     @Override
-    public List<Board> search(Pageable pageable,String title, String tag) {
-
-        return queryFactory.selectFrom(qBoard)
+    public Page<Board> search(Pageable pageable,String title, String tag) {
+        List<Board> result = queryFactory.selectFrom(qBoard)
                 .leftJoin(qBoard.tag, qTag)
-                .where(eqTag(tag), eqTitle(title))
+                .where(eqTag(tag), containTag(title))
                 .orderBy(getSortCondition(pageable.getSort()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        return new PageImpl<>(result);
     }
 
 
@@ -43,11 +45,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
         return qBoard.tag.name.eq(tag);
     }
 
-    private BooleanExpression eqTitle(String title) {
+    private BooleanExpression containTag(String title) {
         if (title == null || title.isEmpty()) {
             return null;
         }
-        return qBoard.title.eq(title);
+        return qBoard.title.contains(title);
     }
 
     @Override

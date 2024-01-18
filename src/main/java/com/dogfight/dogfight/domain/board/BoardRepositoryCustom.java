@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BoardRepositoryCustom {
-    List<Board> search(Pageable pageable, String name , String tag);
+    Page<Board> search(Pageable pageable, String name , String tag);
     Board increaseViewsAndReturnBoard(long id);
     BoardResponse selectRandBoard();
 }

@@ -61,15 +61,15 @@ public class BoardServiceImpl implements BoardService{
         return BoardResponse.of(saveBoard);
     }
 
-    public Page<BoardResponse> getBoardsPage(int pageNo, int pageSize, String criteria, String sort){
+    public Page<BoardResponse> search(int pageNo, int pageSize, String criteria, String sort, String title, String tag){
         Pageable pageable = null;
         if(sort.equals("ASC")){
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, criteria));
         } else {
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, criteria));
         }
-
-        return boardRepository.findAll(pageable).map(BoardResponse::of);
+        Page<BoardResponse> map = boardRepository.findAll(pageable).map(BoardResponse::of);
+        return boardRepository.search(pageable,title, tag).map(BoardResponse::of);
     }
 
     public BoardResponse read(Long id){

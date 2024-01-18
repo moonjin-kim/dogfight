@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BoardService {
     public BoardResponse create(BoardCreateServiceRequest request, LocalDateTime localDateTime);
-    public Page<BoardResponse> getBoardsPage(int pageNo, int pageSize, String criteria, String sort);
+    public Page<BoardResponse> search(int pageNo, int pageSize, String criteria, String sort, String name, String title);
     public BoardResponse read(Long id);
     public BoardResponse next();
     public BoardResponse update(BoardUpdateServiceRequest request);

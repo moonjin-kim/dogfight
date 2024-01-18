@@ -527,7 +527,6 @@ class BoardServiceTest extends IntegrationTestSupport {
                 .extracting("title","writer","tag","content")
                 .contains("축구선수 Goat는3?",writer,"스포츠","메시 vs 호날두");
 
-        log.info("pageTest : {}", boardService.getBoardsPage(0,5,"views","DESC").getContent().get(0).getTitle());
 
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(3);
