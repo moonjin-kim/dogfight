@@ -1,8 +1,10 @@
 package com.dogfight.dogfight.domain.board;
 
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
+import com.dogfight.dogfight.domain.tag.QTag;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,18 +22,32 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     QBoard qBoard = QBoard.board;
+    QTag qTag = QTag.tag;
     @Override
-    public Page<BoardResponse> boardList(Pageable pageable) {
-        List<Board> boards = queryFactory.selectFrom(qBoard)
+    public List<Board> search(Pageable pageable,String title, String tag) {
+
+        return queryFactory.selectFrom(qBoard)
+                .leftJoin(qBoard.tag, qTag)
+                .where(eqTag(tag), eqTitle(title))
                 .orderBy(getSortCondition(pageable.getSort()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
 
-        Long count = queryFactory.select(qBoard.count())
-                .from(qBoard)
-                .fetchOne();
-        return null;
+
+    private BooleanExpression eqTag(String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return null;
+        }
+        return qBoard.tag.name.eq(tag);
+    }
+
+    private BooleanExpression eqTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return null;
+        }
+        return qBoard.title.eq(title);
     }
 
     @Override

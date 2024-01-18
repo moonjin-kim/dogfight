@@ -1,5 +1,6 @@
 package com.dogfight.dogfight.domain.user;
 
+import com.dogfight.dogfight.IntegrationTestSupport;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserTest {
+class UserTest  extends IntegrationTestSupport {
     private final PasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @DisplayName("비밀번호를 암호화 한다")
