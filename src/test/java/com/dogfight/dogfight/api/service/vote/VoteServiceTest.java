@@ -65,13 +65,13 @@ class VoteServiceTest {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -116,13 +116,13 @@ class VoteServiceTest {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -171,13 +171,13 @@ class VoteServiceTest {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -226,13 +226,13 @@ class VoteServiceTest {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";

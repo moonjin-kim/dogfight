@@ -5,12 +5,10 @@ import com.dogfight.dogfight.api.service.board.BoardServiceImpl;
 import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.filehandler.FileHandler;
-import com.dogfight.dogfight.domain.tag.Tag;
 import com.dogfight.dogfight.domain.tag.TagRepository;
 import com.dogfight.dogfight.domain.user.Role;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
-import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -26,10 +24,8 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @Slf4j
@@ -76,13 +72,13 @@ class BoardRepositoryTest  extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -153,13 +149,13 @@ class BoardRepositoryTest  extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";

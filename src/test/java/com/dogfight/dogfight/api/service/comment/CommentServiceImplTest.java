@@ -16,7 +16,6 @@ import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,13 +76,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -135,13 +134,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -222,13 +221,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -290,13 +289,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -356,13 +355,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -422,13 +421,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -481,13 +480,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -541,13 +540,13 @@ class CommentServiceImplTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";

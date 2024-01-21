@@ -6,6 +6,7 @@ import com.dogfight.dogfight.api.service.board.BoardService;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.jwt.JwtProvider;
 import com.dogfight.dogfight.domain.tag.Tag;
+import com.dogfight.dogfight.domain.tag.response.TagListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class BoardController {
     }
 
     @GetMapping("/tag")
-    public ApiResponse<List<Tag>> getTag() {
+    public ApiResponse<List<TagListResponse>> getTag() {
         return ApiResponse.ok(boardService.getTag());
     }
 

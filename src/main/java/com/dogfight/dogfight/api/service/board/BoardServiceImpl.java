@@ -10,6 +10,7 @@ import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.heart.HeartRepository;
 import com.dogfight.dogfight.domain.tag.Tag;
+import com.dogfight.dogfight.domain.tag.response.TagListResponse;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
 import com.dogfight.dogfight.domain.vote.Vote;
@@ -103,8 +104,16 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Tag> getTag() {
-        return tagRepository.findAll();
+    public List<TagListResponse> getTag() {
+        List<TagListResponse> tagListResponses = tagRepository.getTagListAndCount();
+        Long totalBoardCount = boardRepository.count();
+        tagListResponses.add(TagListResponse.builder()
+                        .id(0L)
+                        .name("전체")
+                        .count(totalBoardCount)
+                .build());
+
+        return tagListResponses;
     }
 
     public Boolean delete(Long id){

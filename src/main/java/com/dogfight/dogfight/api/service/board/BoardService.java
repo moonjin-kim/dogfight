@@ -4,6 +4,7 @@ import com.dogfight.dogfight.api.service.board.request.BoardCreateServiceRequest
 import com.dogfight.dogfight.api.service.board.request.BoardUpdateServiceRequest;
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.domain.tag.Tag;
+import com.dogfight.dogfight.domain.tag.response.TagListResponse;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,6 @@ public interface BoardService {
     public BoardResponse read(Long id);
     public BoardResponse next();
     public BoardResponse update(BoardUpdateServiceRequest request);
-    public List<Tag> getTag();
+    public List<TagListResponse> getTag();
     public Boolean delete(Long id);
 }

@@ -21,12 +21,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -74,13 +72,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -136,13 +134,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -206,13 +204,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -263,13 +261,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -321,13 +319,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -404,13 +402,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
@@ -462,13 +460,13 @@ class BoardServiceTest extends IntegrationTestSupport {
         MockMultipartFile image1 = new MockMultipartFile(
                 "images",
                 fileName1 + "." + contentType1,
-                "/image/" + contentType1,
+                "/testImage/" + contentType1,
                 fileInputStream1);
 
         MockMultipartFile image2 = new MockMultipartFile(
                 "images",
                 fileName2 + "." + contentType2,
-                "/image/" + contentType2,
+                "/testImage/" + contentType2,
                 fileInputStream2);
 
         String writer = "testUser";
