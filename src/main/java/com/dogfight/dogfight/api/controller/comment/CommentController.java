@@ -44,12 +44,11 @@ public class CommentController {
 
     @DeleteMapping("/{id}")
     public ApiResponse<Long> delete(@PathVariable(value = "id") Long id,
-                                      HttpServletRequest httpServletRequest) {
+                                      @RequestParam(value = "password") String password) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        String account = jwtProvider.getAccountFromHeader(httpServletRequest);
 
         return ApiResponse.ok(
-                commentService.delete(id,account)
+                commentService.delete(id,password)
         );
     }
 

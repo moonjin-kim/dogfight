@@ -41,8 +41,8 @@ public class CommentResponse {
     }
 
     public static CommentResponse convertCommentToDto(Comment comment) {
-        return comment.getIsDeleted() == Boolean.FALSE ?
-                new CommentResponse(comment.getId(), comment.getBoard().getId(), comment.getSelectId(),"삭제된 댓글입니다.", null) :
+        return comment.getIsDeleted() == Boolean.TRUE ?
+                new CommentResponse(comment.getId(), comment.getBoard().getId(), 3L,"삭제된 댓글입니다.", null) :
                 new CommentResponse(comment.getId(), comment.getBoard().getId(), comment.getSelectId() ,comment.getContent(), comment.getNickname());
     }
 }
