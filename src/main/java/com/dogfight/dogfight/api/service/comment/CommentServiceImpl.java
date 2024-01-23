@@ -2,6 +2,8 @@ package com.dogfight.dogfight.api.service.comment;
 
 import com.dogfight.dogfight.api.service.comment.request.CommentServiceRequest;
 import com.dogfight.dogfight.api.service.comment.response.CommentResponse;
+import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.comment.Comment;
@@ -47,7 +49,7 @@ public class CommentServiceImpl implements CommentService{
         );
 
         if(!comment.getPassword().equals(request.getPassword())) {
-            throw new NullPointerException("잘못된 비밀번호 입니다");
+            throw new CustomException("아이디 혹은 패스워드가 잘못되었습니다", ErrorCode.BAD_CREDENTIALS_EXCEPTION);
         }
 
         comment.updateContent(request.getContent());
@@ -64,7 +66,7 @@ public class CommentServiceImpl implements CommentService{
         );
 
         if(!comment.getPassword().equals(password)) {
-            throw new NullPointerException("잘못된 비밀번호 입니다");
+            throw new CustomException("아이디 혹은 패스워드가 잘못되었습니다", ErrorCode.BAD_CREDENTIALS_EXCEPTION);
         }
 
         comment.changeIsDeleted(true);

@@ -1,7 +1,6 @@
 package com.dogfight.dogfight.domain.comment;
 
 import com.dogfight.dogfight.api.service.comment.response.CommentResponse;
-import com.dogfight.dogfight.domain.board.QBoard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 

@@ -1,6 +1,7 @@
 package com.dogfight.dogfight;
 
 import com.dogfight.dogfight.api.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @Slf4j
+//@RestControllerAdvice
 public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

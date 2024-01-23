@@ -34,7 +34,18 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result);
+        Long count = getCount(title, tag);
+
+        return new PageImpl<>(result,pageable,count);
+    }
+
+    private Long getCount(String title, String tag) {
+        return queryFactory
+                .select(qBoard.count())
+                .from(qBoard)
+                .leftJoin(qBoard.tag, qTag)
+                .where(eqTag(tag), containTag(title))
+                .fetchOne();
     }
 
 

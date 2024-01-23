@@ -2,14 +2,12 @@ package com.dogfight.dogfight.domain.comment;
 
 import com.dogfight.dogfight.domain.BaseEntity;
 import com.dogfight.dogfight.domain.board.Board;
-import com.dogfight.dogfight.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
