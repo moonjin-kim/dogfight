@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService{
 
 
         Comment comment = commentRepository.findById(id).orElseThrow(() ->
-            new NullPointerException("존재하지 않는 댓글입니다.")
+                new CustomException("존재하지 않는 댓글입니다.", ErrorCode.COMMET_NOT_FOUND)
         );
 
         if(!comment.getPassword().equals(request.getPassword())) {

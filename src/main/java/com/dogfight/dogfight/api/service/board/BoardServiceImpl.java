@@ -150,7 +150,7 @@ public class BoardServiceImpl implements BoardService{
 
     private Vote updateVoteImage(Long id,  MultipartFile option1Image, MultipartFile option2Image) {
         Vote vote = voteRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 투표입니다.")
+                () -> new CustomException("존재하지 않는 투표입니다.",ErrorCode.VOTE_NOT_FOUND)
         );
         //기존 이미지 삭제 로직 필요
 
