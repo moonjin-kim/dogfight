@@ -1,6 +1,8 @@
 package com.dogfight.dogfight.api.service.vote;
 
 import com.dogfight.dogfight.api.service.vote.response.VoteResponse;
+import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ public class VoteServiceImpl implements VoteService{
         } else if(count == 2){
             voteRepository.incrementSecondOptionCount(id);
         } else {
-            throw new IllegalArgumentException("잘못된 투표 번호 입니다.");
+            throw new CustomException("잘못된 투표 번호 입니다.", ErrorCode.INVALID_PARAMETER);
         }
 
         Vote result = voteRepository.findById(id).orElseThrow();

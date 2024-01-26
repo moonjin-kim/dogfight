@@ -18,10 +18,10 @@ public enum ErrorCode {
     BOARD_NOT_FOUND(404, "게시글을 찾을 수 없습니다."),
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다"),
     VOTE_NOT_FOUND(404, "투표가 존재하지 않습니다"),
-    COMMET_NOT_FOUND(404, "댓글이 존재하지 않습니다."),
+    COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다."),
 
     //415
-    IMAGE_TYPE_ERRO(415, "이미지 형식이 잘못되었습니다.");
+    IMAGE_TYPE_ERROR(415, "이미지 형식이 잘못되었습니다.");
 
     private final int status;
     private final String message;
