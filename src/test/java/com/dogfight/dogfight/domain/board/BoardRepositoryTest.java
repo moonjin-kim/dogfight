@@ -62,11 +62,38 @@ class BoardRepositoryTest  extends IntegrationTestSupport {
         fileHandler.deleteFolder();
     }
 
+    User initUser(String writer) throws Exception {
+
+        User user = User.builder()
+                .account("testUser")
+                .password("!test12345")
+                .nickname(writer)
+                .email("test123@gmail.com")
+                .role(Role.USER)
+                .build();
+
+        return userRepository.save(user);
+    }
+    BoardCreateServiceRequest saveBoard(String writer, MockMultipartFile image1, MockMultipartFile image2) {
+        return BoardCreateServiceRequest.builder()
+                .title("축구선수 Goat는2?")
+                .writer(writer)
+                .tag("스포츠")
+                .content("메시 vs 호날두")
+                .option1("메시")
+                .option1Image(image1)
+                .option2("호날두")
+                .option2Image(image2)
+                .build();
+    }
+
+
     @DisplayName("게시판을 페이지 형식으로 조회 가능하다")
     @Test
     void searchBoardPage() throws Exception{
         //given
         LocalDateTime registeredDateTime = LocalDateTime.now();
+
         FileInputStream fileInputStream1 = new FileInputStream(filePath1);
         FileInputStream fileInputStream2 = new FileInputStream(filePath2);
         MockMultipartFile image1 = new MockMultipartFile(
@@ -82,48 +109,12 @@ class BoardRepositoryTest  extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
 
-        userRepository.save(user);
+        User userResult = initUser(writer);
 
-        BoardCreateServiceRequest request1 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는1?")
-                .writer(writer)
-                .tag("인물")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request2 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는2?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request3 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는3?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
+        BoardCreateServiceRequest request1 = saveBoard(writer,image1,image2);
+        BoardCreateServiceRequest request2 = saveBoard(writer,image1,image2);
+        BoardCreateServiceRequest request3 = saveBoard(writer,image1,image2);
 
         //when
         BoardResponse boardResponse1 = boardService.create(request1,registeredDateTime);
@@ -167,40 +158,11 @@ class BoardRepositoryTest  extends IntegrationTestSupport {
                 .role(Role.USER)
                 .build();
 
-        userRepository.save(user);
+        User userResult = initUser(writer);
 
-        BoardCreateServiceRequest request1 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는1?")
-                .writer(writer)
-                .tag("인물")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request2 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는2?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request3 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는3?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
+        BoardCreateServiceRequest request1 = saveBoard(writer,image1,image2);
+        BoardCreateServiceRequest request2 = saveBoard(writer,image1,image2);
+        BoardCreateServiceRequest request3 = saveBoard(writer,image1,image2);
 
         //when
         BoardResponse boardResponse1 = boardService.create(request1,registeredDateTime);
