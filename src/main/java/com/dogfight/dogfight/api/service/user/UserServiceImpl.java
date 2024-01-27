@@ -40,7 +40,6 @@ public class UserServiceImpl implements  UserService{
     @Transactional
     public UserServiceResponse register(UserRegisterServiceRequest userLoginServiceRequest, LocalDateTime registerDateTime) {
         User user = userLoginServiceRequest.toEntity();
-        log.info("register");
         checkAccountDuplicate(user.getAccount());
         user.hashPassword(bCryptPasswordEncoder);
 
@@ -58,7 +57,6 @@ public class UserServiceImpl implements  UserService{
             String password = userLoginServiceRequest.getPassword();
 
             User user = userRepository.findByAccount(account);
-            log.info(user.getAccount());
 
             if(!user.checkPassword(password,bCryptPasswordEncoder)) {
                 throw new CustomException("아이디 혹은 패스워드가 잘못되었습니다", ErrorCode.BAD_CREDENTIALS_EXCEPTION);
@@ -100,7 +98,6 @@ public class UserServiceImpl implements  UserService{
     @Transactional
     public UserTokenResponse refresh(UserServiceRefreshTokenRequest userServiceRefreshTokenRequest, Date date) {
         String refreshToken = userServiceRefreshTokenRequest.getRefreshToken();
-        log.info("refreshService = {}", userServiceRefreshTokenRequest.getRefreshToken());
         //refresh Token 검증
         jwtProvider.validateToken("refresh",refreshToken);
 

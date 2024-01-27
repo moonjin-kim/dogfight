@@ -39,7 +39,6 @@ public class UserController {
     @PostMapping("/login")
     public ApiResponse<UserTokenResponse> login(@RequestBody UserLoginRequest request) {
         Date localDateTime = new Date();
-        log.info("loginTest");
         return ApiResponse.ok(
                 userService.login(request.toServiceRequest(),localDateTime)
         );
