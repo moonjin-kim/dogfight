@@ -163,7 +163,8 @@ class BoardServiceTest extends IntegrationTestSupport {
         BoardCreateServiceRequest request = initBoard(writer,title,tag, image1, image2,registeredDateTime);
         //when
         assertThatThrownBy(() -> boardService.create(request,registeredDateTime))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(CustomException.class)
+                .hasMessage("존재하지 않는 유저입니다.");
 
     }
 
@@ -257,8 +258,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = initUser(writer);
-
+        initUser(writer);
 
         String title = "축구선수 Goat는?";
         String tag = "스포츠";
@@ -293,7 +293,7 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = initUser(writer);
+        initUser(writer);
 
 
         String title = "축구선수 Goat는?";
@@ -392,39 +392,19 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        String tagName = "스포츠";
-
-        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는?")
-                .writer(writer)
-                .tag(tagName)
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        Tag tag = Tag.builder()
-                .name(tagName)
-                .build();
-
-        tagRepository.save(tag);
-        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
-        boardService.delete(saveBoardResponse.getId());
+        BoardCreateServiceRequest request = initBoard(writer,title,tag ,image1, image2,registeredDateTime);
 
         //when
-        assertThatThrownBy(() -> boardService.read(saveBoardResponse.getId()))
+        BoardResponse boardResponse = boardService.create(request,registeredDateTime);
+        boardService.delete(boardResponse.getId());
+
+        //when
+        assertThatThrownBy(() -> boardService.read(boardResponse.getId()))
                 .isInstanceOf(CustomException.class)
                 .hasMessage("존재하지 않는 게시글입니다.");
 
@@ -450,53 +430,19 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        BoardCreateServiceRequest request1 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는3?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request2 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는2?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        BoardCreateServiceRequest request3 = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는1?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
+        BoardCreateServiceRequest request1 = initBoard("축구선수 Goat는?",title,tag ,image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request2 = initBoard("축구선수 Goat는1?",title,tag ,image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request3 = initBoard("축구선수 Goat는2?",title,tag ,image1, image2,registeredDateTime);
 
         //when
         BoardResponse boardResponse1 = boardService.create(request1,registeredDateTime);
         boardService.create(request2,registeredDateTime);
-        boardService.create(request2,registeredDateTime);
+        boardService.create(request3,registeredDateTime);
 
         //then
         assertThat(boardResponse1.getId()).isNotNull();
