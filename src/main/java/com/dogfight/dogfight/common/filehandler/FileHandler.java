@@ -105,7 +105,8 @@ public class FileHandler {
     }
 
     public void deleteFolder() {
-        File folder = new File(uploadDir);
+        String path = uploadDir + "images/";
+        File folder = new File(path);
 
         try {
             deleteFolder(folder);
