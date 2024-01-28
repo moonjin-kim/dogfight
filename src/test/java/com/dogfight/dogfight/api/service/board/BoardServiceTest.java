@@ -11,6 +11,7 @@ import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.tag.Tag;
 import com.dogfight.dogfight.domain.tag.TagRepository;
+import com.dogfight.dogfight.domain.tag.response.TagListResponse;
 import com.dogfight.dogfight.domain.user.Role;
 import com.dogfight.dogfight.domain.user.User;
 import com.dogfight.dogfight.domain.user.UserRepository;
@@ -74,7 +75,7 @@ class BoardServiceTest extends IntegrationTestSupport {
         return userRepository.save(user);
     }
 
-    BoardCreateServiceRequest initBoard(String writer, String tag,String title ,MockMultipartFile image1,MockMultipartFile image2,LocalDateTime registeredDateTime) {
+    BoardCreateServiceRequest initBoard(String writer,String title , String tag,MockMultipartFile image1,MockMultipartFile image2,LocalDateTime registeredDateTime) {
         return BoardCreateServiceRequest.builder()
                 .title(title)
                 .writer(writer)
@@ -461,5 +462,101 @@ class BoardServiceTest extends IntegrationTestSupport {
         List<Vote> votes = voteRepository.findAll();
         assertThat(votes).hasSize(3);
 
+    }
+
+    @DisplayName("태그들을 조회 가능하다")
+    @Test
+    void getTags() throws Exception{
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/testImage/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/testImage/" + contentType2,
+                fileInputStream2);
+
+        String writer = "testUser";
+        User user = initUser(writer);
+
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
+
+        BoardCreateServiceRequest request1 = initBoard(writer,title,"스포츠", image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request2 = initBoard(writer,title,"게임", image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request3 = initBoard(writer,title,"인물", image1, image2,registeredDateTime);
+
+        boardService.create(request1,registeredDateTime);
+        boardService.create(request2,registeredDateTime);
+        boardService.create(request3,registeredDateTime);
+
+
+        //when
+        List<TagListResponse> tags = boardService.getTag();
+
+        //then
+        log.info("tagLists = {}" ,tags.get(0).getName());
+        assertThat(tags).hasSize(4);
+    }
+
+    @DisplayName("태그별 게시글 개수를 조회 가능하다")
+    @Test
+    void getTagsByBoardsCount() throws Exception{
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/testImage/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/testImage/" + contentType2,
+                fileInputStream2);
+
+        String writer = "testUser";
+        User user = initUser(writer);
+
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
+
+        BoardCreateServiceRequest request1 = initBoard(writer,title,"하이볼", image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request2 = initBoard(writer,title,"게임", image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request3 = initBoard(writer,title,"인물", image1, image2,registeredDateTime);
+        BoardCreateServiceRequest request4 = initBoard(writer,title,"인물", image1, image2,registeredDateTime);
+
+        boardService.create(request1,registeredDateTime);
+        boardService.create(request2,registeredDateTime);
+        boardService.create(request3,registeredDateTime);
+        boardService.create(request4,registeredDateTime);
+
+
+        //when
+        List<TagListResponse> tags = boardService.getTag();
+
+        //then
+        assertThat(tags).hasSize(4);
+        assertThat(tags.get(0).getName()).isEqualTo("게임");
+        assertThat(tags.get(0).getCount()).isEqualTo(1);
+
+        assertThat(tags.get(1).getName()).isEqualTo("인물");
+        assertThat(tags.get(1).getCount()).isEqualTo(2);
+
+        assertThat(tags.get(2).getName()).isEqualTo("하이볼");
+        assertThat(tags.get(2).getCount()).isEqualTo(1);
+
+        assertThat(tags.get(3).getName()).isEqualTo("전체");
+        assertThat(tags.get(3).getCount()).isEqualTo(4);
     }
 }
