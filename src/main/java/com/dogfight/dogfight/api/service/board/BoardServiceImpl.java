@@ -47,6 +47,9 @@ public class BoardServiceImpl implements BoardService{
     public BoardResponse create(BoardCreateServiceRequest request, LocalDateTime localDateTime){
 
         User user = userRepository.findByAccount(request.getWriter());
+        if(user == null) {
+            throw new CustomException("존재하지 않는 유저입니다.",ErrorCode.UNKNOWN_USER);
+        }
 
         Vote vote = createVote(request.getOption1(),
                 request.getOption2(),

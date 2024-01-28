@@ -11,6 +11,7 @@ public enum ErrorCode {
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
 
     //401 Unauthorized 권한 없음
+    UNKNOWN_USER(401, "존재하지 않는 유저입니다."),
     BAD_CREDENTIALS_EXCEPTION(401, "잘못된 패스워드입니다. 다시 시도해주세요"),
     INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(401,"아이디가 틀렸습니다. 다시 시도해주세요."),
 

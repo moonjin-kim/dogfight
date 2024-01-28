@@ -42,7 +42,7 @@ public class LogTraceAspect {
             return result;
         } catch (Exception e){
             logTrace.exception(status,e);
-            return e;
+            throw e;
         }
     }
 }

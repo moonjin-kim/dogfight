@@ -6,6 +6,7 @@ import com.dogfight.dogfight.api.service.board.request.BoardUpdateServiceRequest
 import com.dogfight.dogfight.api.service.board.response.BoardResponse;
 import com.dogfight.dogfight.common.filehandler.FileHandler;
 import com.dogfight.dogfight.config.error.CustomException;
+import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.board.Board;
 import com.dogfight.dogfight.domain.board.BoardRepository;
 import com.dogfight.dogfight.domain.tag.Tag;
@@ -62,6 +63,31 @@ class BoardServiceTest extends IntegrationTestSupport {
         fileHandler.deleteFolder();
     }
 
+    User initUser(String writer) {
+       User user = User.builder()
+                .account("testUser")
+                .password("!test12345")
+                .nickname(writer)
+                .email("test123@gmail.com")
+                .role(Role.USER)
+                .build();
+        return userRepository.save(user);
+    }
+
+    BoardCreateServiceRequest initBoard(String writer, String tag,String title ,MockMultipartFile image1,MockMultipartFile image2,LocalDateTime registeredDateTime) {
+        return BoardCreateServiceRequest.builder()
+                .title(title)
+                .writer(writer)
+                .tag(tag)
+                .content("메시 vs 호날두")
+                .option1("메시")
+                .option1Image(image1)
+                .option2("호날두")
+                .option2Image(image2)
+                .build();
+
+    }
+
     @DisplayName("게시판을 저장한다")
     @Test
     void saveBoardTag() throws Exception{
@@ -82,26 +108,12 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는?")
-                .writer(writer)
-                .tag("스포츠")
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
+        BoardCreateServiceRequest request = initBoard(writer,title,tag ,image1, image2,registeredDateTime);
 
         //when
         BoardResponse boardResponse = boardService.create(request,registeredDateTime);
@@ -121,6 +133,37 @@ class BoardServiceTest extends IntegrationTestSupport {
 
         List<Vote> votes = voteRepository.findAll();
         assertThat(votes).hasSize(1);
+
+    }
+
+    @DisplayName("존재하지 않는 유저가 게시판을 생성하면 에러가 발생한다.")
+    @Test
+    void saveBoardNoExistUser() throws Exception{
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+        FileInputStream fileInputStream1 = new FileInputStream(filePath1);
+        FileInputStream fileInputStream2 = new FileInputStream(filePath2);
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images",
+                fileName1 + "." + contentType1,
+                "/testImage/" + contentType1,
+                fileInputStream1);
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "images",
+                fileName2 + "." + contentType2,
+                "/testImage/" + contentType2,
+                fileInputStream2);
+
+        String writer = "testUser";
+
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
+
+        BoardCreateServiceRequest request = initBoard(writer,title,tag, image1, image2,registeredDateTime);
+        //when
+        assertThatThrownBy(() -> boardService.create(request,registeredDateTime))
+                .isInstanceOf(RuntimeException.class);
 
     }
 
@@ -214,44 +257,23 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
 
-        String tagName = "스포츠";
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는?")
-                .writer(writer)
-                .tag(tagName)
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        Tag tag = Tag.builder()
-                .name(tagName)
-                .build();
-
-        Tag saveTag = tagRepository.save(tag);
-        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
+        BoardCreateServiceRequest request = initBoard(writer,title,tag ,image1, image2,registeredDateTime);
+        BoardResponse boardResponse = boardService.create(request,registeredDateTime);
 
         //when
-        BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
+        BoardResponse readBoardResponse1 = boardService.read(boardResponse.getId());
 
         //then
-        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
+        assertThat(readBoardResponse1.getId()).isEqualTo(boardResponse.getId());
     }
 
-    @DisplayName("등록된 게시글을 id로 조회할 수 있다.")
+    @DisplayName("게시글을 조회할 때 views가 1씩 증가한다.")
     @Test
     void readBoardToIncreaseViews() throws Exception {
         //given
@@ -271,41 +293,20 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
 
-        String tagName = "스포츠";
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는?")
-                .writer(writer)
-                .tag(tagName)
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        Tag tag = Tag.builder()
-                .name(tagName)
-                .build();
-
-        Tag saveTag = tagRepository.save(tag);
-        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
+        BoardCreateServiceRequest request = initBoard(writer,title,tag ,image1, image2,registeredDateTime);
+        BoardResponse boardResponse = boardService.create(request,registeredDateTime);
 
         //when
-        BoardResponse readBoardResponse1 = boardService.read(saveBoardResponse.getId());
+        BoardResponse readBoardResponse1 = boardService.read(boardResponse.getId());
 
         //then
-        assertThat(readBoardResponse1.getId()).isEqualTo(saveBoardResponse.getId());
+        assertThat(readBoardResponse1.getId()).isEqualTo(boardResponse.getId());
         assertThat(readBoardResponse1.getViews()).isEqualTo(1);
     }
 
@@ -329,42 +330,21 @@ class BoardServiceTest extends IntegrationTestSupport {
                 fileInputStream2);
 
         String writer = "testUser";
-        User user = User.builder()
-                .account("testUser")
-                .password("!test12345")
-                .nickname(writer)
-                .email("test123@gmail.com")
-                .role(Role.USER)
-                .build();
+        User user = initUser(writer);
 
-        userRepository.save(user);
 
-        String tagName = "스포츠";
+        String title = "축구선수 Goat는?";
+        String tag = "스포츠";
 
-        BoardCreateServiceRequest request = BoardCreateServiceRequest.builder()
-                .title("축구선수 Goat는?")
-                .writer(writer)
-                .tag(tagName)
-                .content("메시 vs 호날두")
-                .option1("메시")
-                .option1Image(image1)
-                .option2("호날두")
-                .option2Image(image2)
-                .build();
-
-        Tag tag = Tag.builder()
-                .name(tagName)
-                .build();
-
-        Tag saveTag = tagRepository.save(tag);
-        BoardResponse saveBoardResponse = boardService.create(request,registeredDateTime);
-        Long voteId = saveBoardResponse.getVote().getId();
+        BoardCreateServiceRequest request = initBoard(writer,title,tag ,image1, image2,registeredDateTime);
+        BoardResponse boardResponse = boardService.create(request,registeredDateTime);
+        Long voteId = boardResponse.getVote().getId();
 
         BoardUpdateServiceRequest updateRequest = BoardUpdateServiceRequest.builder()
-                .id(saveBoardResponse.getId())
+                .id(boardResponse.getId())
                 .title("축구선수 Goat는2?")
                 .writer(user.getAccount())
-                .tag(tagName)
+                .tag(tag)
                 .content("메시 vs 호날두2")
                 .voteId(voteId)
                 .option1("메시")
@@ -376,7 +356,7 @@ class BoardServiceTest extends IntegrationTestSupport {
         BoardResponse updateBoardResponse = boardService.update(updateRequest);
 
         //then
-        assertThat(updateBoardResponse.getId()).isEqualTo(saveBoardResponse.getId());
+        assertThat(updateBoardResponse.getId()).isEqualTo(boardResponse.getId());
         assertThat(updateBoardResponse)
                 .extracting("title","writer","tag","content")
                 .contains("축구선수 Goat는2?",writer,"스포츠","메시 vs 호날두2");
