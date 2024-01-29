@@ -6,16 +6,19 @@ import com.dogfight.dogfight.config.error.ErrorCode;
 import com.dogfight.dogfight.domain.vote.Vote;
 import com.dogfight.dogfight.domain.vote.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService{
     private final VoteRepository voteRepository;
 
     public VoteResponse vote(long id, int count){
+        log.info("id = {}, count = {}",id,count);
         if(count == 1){
             voteRepository.incrementFirstOptionCount(id);
         } else if(count == 2){

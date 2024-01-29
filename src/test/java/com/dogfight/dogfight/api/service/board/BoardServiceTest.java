@@ -506,7 +506,7 @@ class BoardServiceTest extends IntegrationTestSupport {
         assertThat(tags).hasSize(4);
     }
 
-    @DisplayName("태그별 게시글 개수를 조회 가능하다")
+    @DisplayName("태그별 게시글 개수를 조회 가능하다.")
     @Test
     void getTagsByBoardsCount() throws Exception{
         //given
