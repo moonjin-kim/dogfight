@@ -1,0 +1,62 @@
+spring:
+  profiles:
+    default: local
+  web:
+    resources:
+      add-mappings: 'false'
+    mvc:
+      throw-exception-if-no-handler-found: 'true'
+
+  datasource:
+    url: jdbc:mariadb://(DB_IP):3306/(DB)
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: (DB_NAME)
+    password: (DB_PASSWORD)
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+  jwt:
+    key: (jwtKey)
+    live:
+      access-expiration-time: 432000
+      refresh-expiration-time: 1209600000
+
+  data:
+    redis:
+      host: (REDIS_IP)
+      port: (REDIS_PORT)
+
+  logging:
+    level:
+      org.springframework.data.redis: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  file:
+    upload-dir: (UPLOAD_DIR)
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+  file:
+    upload-dir: (UPLOAD_DIR)

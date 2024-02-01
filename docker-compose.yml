@@ -1,0 +1,14 @@
+version: "3"
+services:
+  spring-app:
+    container_name: spring-app
+    image: "moonjin974/dogfight-server:latest"
+    ports:
+      - "8080:8080"
+  nginx:
+    container_name: nginx
+    image: "nginx:test"
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-app

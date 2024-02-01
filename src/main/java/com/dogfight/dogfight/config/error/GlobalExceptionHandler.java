@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = CustomException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException ex){
+        log.error("customError = {}",ex.getErrorCode());
         ErrorResponse response = ErrorResponse.of(ex.getErrorCode());
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
@@ -22,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> validException(
             MethodArgumentNotValidException ex) {
-
+        log.error("MethodArgumentNotValidException = {}",ex.getBindingResult());
         ErrorResponse response = new ErrorResponse(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage(),ex.getStatusCode().value());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 2
